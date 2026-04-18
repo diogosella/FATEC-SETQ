@@ -1,0 +1,139 @@
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loadingFull {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20% auto;
+}
+
+.matchupTitle {
+    font-family: gotham-bold;
+    font-size: 42px;
+    margin: 10% 0 3% 28px;
+    color: var(--main-orange); 
+}
+
+.matchup {
+    width: 80%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    height: 140px;
+    border-radius: 25px;
+    gap: 18px;
+    background-color: var(--main-orange);
+    padding: 48px;
+    color: white;
+}
+
+.TeamA, .TeamB {
+    width: 120px;
+    text-align: center;
+    font-size: 16px;
+    font-family: gotham-bold;
+    padding: 2px 20px;
+    text-shadow: 0 2px 22px black;
+    position: relative; 
+}
+
+.faA, .faB {
+    position: absolute;
+    font-size: 112px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.267);
+    filter: blur(2.5px);
+}
+
+.teamsList {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 28px auto;
+    border-radius: 25px;
+    
+}
+
+/* .teamsListTitle {
+    font-family: gotham-bold;
+    font-size: 24px;
+    padding-left: 28px;
+} */
+
+.noTeamsRegistered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.faVolleyball {
+    font-size: 48px;
+    color: gray;
+}
+
+.noTeamsRegisteredText {
+    text-align: center;
+    font-size: 18px;
+    margin: 18px 0 28px 0 ;
+    color: gray;
+}
+
+.queueItem {
+    width: 95%;
+    margin: 0 auto;
+    font-size: 16px;
+    list-style: none;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: rgba(128, 128, 128, 0.322);
+    border: 1px solid var(--faded-gray);
+    border-radius: 15px;
+    animation: slideUp 0.4s ease forwards;
+    opacity: 0;
+}
+
+.queueList {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 95%;
+    padding: 0;
+}
+
+.listLine {
+    border-color: rgba(128, 128, 128, 0.144);
+}
+
+
+/* ==============CSS PARA PRIMEIRA ENTREGA (descomentar tudo acima e apagar tudo abaixo quando houver influencia do ADMIN sobre os times jogando)========================== */
+
+.teamsListTitle {
+    font-family: gotham-bold;
+    color: var(--main-orange);
+    font-size: 32px;
+    padding-left: 28px;
+    margin-bottom: 0;
+}
+
+.gameDay {
+    font-size: 18px;
+    margin-top: 0;
+    padding-left: 28px;
+    color: var(--faded-gray);
+    font-family: gotham-bold;
+}

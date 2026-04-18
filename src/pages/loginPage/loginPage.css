@@ -1,0 +1,33 @@
+
+body {
+    background-image: url(../../assets/images/background.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    font-family: 'gotham';
+    overflow: hidden;
+}
+
+.credentialsContainer {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 25%;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.logoContainer {
+    color: var(--main-orange);
+    font-family: 'gotham-bold';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 62px 0 28px 0;
+}
+
+.logoContainer img {
+    width: 100px;
+}

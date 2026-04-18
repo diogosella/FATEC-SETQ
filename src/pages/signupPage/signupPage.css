@@ -1,0 +1,8 @@
+.signinInputContainer {
+    background-color: white;
+    padding: 28px;
+    border-radius: 15px;
+    width: 100%;
+    box-shadow: 0 15px 20px black;
+    margin: 15vh 0;
+}

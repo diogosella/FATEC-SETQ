@@ -1,0 +1,139 @@
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 80%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpCard {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.contentContainer {
+    width: 35%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: white;
+    overflow-y: auto;
+}
+
+.contentContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.contentContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contentContainer::-webkit-scrollbar-thumb {
+    background-color: var(--main-orange);
+    border-radius: 10px;
+}
+
+.teamsTitle {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 5vh;
+    margin-bottom: 2vh;
+}
+
+.teamsText {
+    color: var(--main-orange);
+    margin: 0;
+}
+
+
+.availableTeams {
+    font-size: 22px;
+    margin-bottom: 2vh;
+    color: var(--main-orange);
+    font-family: "gotham-bold";
+}
+
+.teamsShift {
+    font-size: 14px;
+    color: grey;
+    margin-top: 1vh;
+}
+
+.teamsSelection{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-bottom: 5vh;
+}
+
+.teamsButton{
+    font-size: 17px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--main-orange);
+    color: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.teamsButton:hover{
+    background-color: orange;
+    transition: 0.2s;
+}
+
+.teamsButtonDisabled {
+    font-size: 17px;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--main-orange);
+    color: var(--main-orange);
+    background-color: none;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.createTeamComponent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background: white;
+  padding: 22px 20px;
+  z-index: 99;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  animation: slideUp 0.4s ease forwards;
+}
+
+.createTeamCloseButton {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+}
+
+.currentTeamDisplay {
+    position: relative;
+}

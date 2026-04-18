@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'gotham';
+    src: url('../public/fonts/GothamBook.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'gotham-bold';
+    src: url('../public/fonts/GothamBold.otf') format('opentype');
+}
+
+
+:root {
+  --main-orange: #F58634;
+  --faded-gray: rgba(128, 128, 128, 0.452);
+  font-family: 'gotham';
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+html {
+    height: 100%;
+}

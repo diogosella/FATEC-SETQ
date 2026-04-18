@@ -1,0 +1,86 @@
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.closedSign {
+    display: flex;
+    flex-direction: column;
+    margin: 25vh auto 0 auto;
+    align-items: center;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+    animation-delay: 0s;
+}
+
+.pageContainer {
+    width: 35%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: white;
+
+}
+
+.closedSign {
+    display: flex;
+    flex-direction: column;
+    margin: 25vh auto 0 auto;
+    align-items: center;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+    animation-delay: 0s;
+}
+
+.closedText {
+    font-family: 'gotham-bold';
+    font-size: 20px;
+}
+
+.closedIcon {
+    font-size: 32px;
+}
+
+
+.closedSubtitle {
+    width: 50%;
+    margin: 0 auto;
+    font-size: 12px;
+    text-align: center;
+    color: grey;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+    animation-delay: 0.1s;
+}
+
+.closedInfo span {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+}
+
+
+
+.closedTimer {
+    text-align: center;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+    animation-delay: 0.2s;
+}
+
+.timerTitle {
+    font-size: 12px;
+    margin: 64px 0 0 0;
+    color: grey;
+}
+
+.timer {
+    font-family: 'gotham-bold';
+    font-size: 30px;
+}

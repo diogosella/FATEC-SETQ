@@ -1,0 +1,68 @@
+
+
+.componentTitle {
+    font-size: 32px;
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+    margin: 0;
+}
+
+.createTeamHeadline {
+    display: flex;
+    align-items: center;    
+    justify-content: space-between;
+    margin: 22px 0;
+}
+
+.createTeamForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.createTeamLabel {
+    font-size: 14px;
+}
+
+.createTeamInput {
+    width: 420px;
+    height: 36px;
+    margin-top: 8px;
+    border: none;
+    background-color: var(--faded-gray);
+    outline: none;
+    border-radius: 5px;
+    padding: 0 8px;
+}
+
+.createTeamButton {
+    width: 180px;
+    margin-top: 12px;
+    align-self: center;
+    color: white;
+    background-color: var(--main-orange);
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    font-family: 'gotham-bold';
+    cursor: pointer;
+}
+
+.createTeamButton:hover {
+    background-color: orange;
+    transition: 0.2s;
+}
+
+.createTeamCloseButton {
+    padding: 6px;
+    color: var(--main-orange);
+    background-color: rgba(255, 166, 0, 0.406);
+    border: solid 0.1px var(--main-orange);
+    border-radius: 5px;
+}
+
+.createTeamCloseButton:hover {
+    cursor: pointer;
+    background-color: orange;
+    color: white;
+    transition: 0.3s;
+}

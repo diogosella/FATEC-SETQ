@@ -1,0 +1,145 @@
+.teamsDisplay{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.teamName {
+    font-size: 22px;
+    margin-bottom: 1vh;
+    color: black;
+    padding-left: 1vw;
+}
+
+.displayBox{
+    border: 2px solid var(--faded-gray);
+    border-radius: 10px;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: slideUpCard 0.4s ease forwards;
+}
+
+.displayMembers{
+    display: flex;
+    flex-direction: line;
+    flex-wrap: wrap;
+    padding-left: 2vw;
+}
+
+.filledSpot, .freeSpot{
+    width: 40%;
+    margin: 6px 0 6px 0;
+}
+
+.freeSpot {
+    color: var(--faded-gray);
+}
+
+.filledSpot::marker {
+  color: var(--main-orange);
+}
+
+.displayAlreadyIn{
+    color: var(--main-orange);
+}
+
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.joinButton {
+    width: 95%;
+    color: var(--main-orange);
+    border: 1px solid var(--main-orange);
+    border-radius: 5px;
+    padding: 10px 0;
+    font-family: "gotham-bold";
+    margin: 0 0 18px 0;
+}
+
+.joinButton:hover {
+    cursor: pointer;
+    background-color: var(--main-orange);
+    color: white;
+    transition: 0.2s;
+}
+
+.joinIcon {
+    font-size: 12px;
+    margin-right: 12px;
+}
+
+.hrLine {
+     border-top: 1px solid var(--faded-gray);;
+    width: 95%;
+    margin-bottom: 14px;
+}
+
+.loadingTeams {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 8vh;
+}
+
+.fullTeamWarn {
+    color: var(--faded-gray);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.alreadyTeamedContainer {
+    margin-bottom: 12px;
+}
+
+.alreadyTeamed {
+    padding: 4px 22px;
+    background-color: rgba(255, 166, 0, 0.343);
+    border: solid 0.1px var(--main-orange);
+    border-radius: 10px;
+    color: var(--main-orange);
+}
+
+.leaveTeamButton {
+    margin-left: 20px;
+    border: 1px solid orange;
+    border-radius: 5px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.leaveIcon {
+    color: var(--main-orange);
+    font-size: 16px;
+}
+
+.leaveTeamButton:hover {
+    background-color: var(--main-orange);
+
+    .leaveIcon {
+        color: white;
+    }
+    transition: 0.1s;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: var(--main-orange);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.myTeamBox {
+    border-color: var(--main-orange);
+    background: linear-gradient(135deg, #fff7ed, #ffe0c7);
+    box-shadow: 0 0 25px rgba(255, 140, 0, 0.2);
+}
