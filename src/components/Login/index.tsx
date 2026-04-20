@@ -30,7 +30,7 @@ const [loading, setLoading] = useState(false)
     if (err instanceof Error) {
         setError(err.message)
     } else {
-        setError('Erro desconhecido')
+        setError('Erro desconhecido!')
     } 
     } finally {
         setLoading(false)
