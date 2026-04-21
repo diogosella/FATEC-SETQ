@@ -6,6 +6,13 @@
     border-radius: 15px;
     width: 100%;
     box-shadow: 0 15px 20px black;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .loginInputContainer {
+        padding: 22px;
+    }
 }
 
 .inputContainer form {

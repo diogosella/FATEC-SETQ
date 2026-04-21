@@ -1,6 +1,6 @@
-@keyframes slideUp {
+@keyframes modalSlideUp {
   from {
-    transform: translate(-50%, 80%);
+    transform: translate(-50%, calc(-50% + 30px));
     opacity: 0;
   }
   to {
@@ -98,7 +98,7 @@
     font-size: 17px;
     padding: 6px;
     border-radius: 10px;
-    border: 1px solid var(--main-orange);
+      border: 1px solid var(--main-orange);
     color: var(--main-orange);
     background-color: none;
 }
@@ -118,14 +118,17 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, -50%);
+  max-width: min(90vw, 500px);
+  max-height: 90vh;
+  box-sizing: border-box;
   background: white;
   padding: 22px 20px;
   z-index: 99;
   border-radius: 8px;
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   opacity: 0;
-  animation: slideUp 0.4s ease forwards;
+  animation: modalSlideUp 0.4s ease forwards;
 }
 
 .createTeamCloseButton {
@@ -136,4 +139,15 @@
 
 .currentTeamDisplay {
     position: relative;
+}
+
+@media (max-width: 768px) {
+    .contentContainer {
+        width: 100%;
+    }
+
+    .teamsTitle,
+    .teamsSelection {
+        width: 90%;
+    }
 }

@@ -66,3 +66,18 @@
     color: white;
     transition: 0.3s;
 }
+
+@media (max-width: 768px) {
+    .createTeamInput {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .createTeamButton {
+        width: 60%;
+    }
+
+    .componentTitle {
+        font-size: 26px;
+    }
+}

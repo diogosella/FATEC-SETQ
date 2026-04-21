@@ -31,3 +31,21 @@ body {
 .logoContainer img {
     width: 100px;
 }
+
+@media (max-width: 768px) {
+    body {
+        background-size: cover;
+    }
+
+    .credentialsContainer {
+        width: 85%;
+    }
+
+    .logoContainer {
+        margin: 8vh 0 24px 0;
+    }
+
+    .logoContainer img {
+        width: 80px;
+    }
+}
