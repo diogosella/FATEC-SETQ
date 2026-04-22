@@ -5,6 +5,8 @@ import Disabled from './pages/disabledPage';
 import Teams from './pages/teamsPage';
 import PrivateRoute from './PrivateRoute';
 import MatchesPage from './pages/matchesPage';
+import ForgotPassword from './pages/forgotPage';
+import ResetPassword from './pages/resetPage'
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path='/signup' element={<SignUp />} />
       <Route path='/disabled' element={<Disabled />} />
       <Route path='/matches' element={<MatchesPage />} />
+      <Route path='/forgotPassword' element={<ForgotPassword />} />
+      <Route path='/resetPassword' element={<ResetPassword />} />
 
       <Route
         path='/teams'
