@@ -1,19 +1,24 @@
 import './header.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightFromBracket, faGear } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../supabase'
 import logo from "../../assets/images/white-logo.png"
-
+import { useState } from 'react'
 
 export default function Header() {
-
+    const [open, setOpen] = useState(false)
     const navigate = useNavigate()
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
         navigate('/')
     }
+
+    const handleConfig = () => {
+        setOpen(!open)
+    }
+
     return (
         <>
             <div className="headerContainer">
@@ -23,7 +28,7 @@ export default function Header() {
                 </div>
                 <div className="icons">
                     <div className="config">
-                        <button>
+                        <button onClick={handleConfig}>
                             <FontAwesomeIcon className='configIcon' icon={faGear} />
                         </button>
                     </div>
@@ -33,6 +38,11 @@ export default function Header() {
                         </button>
                     </div>
                 </div>
+                {open && <div className='menu'>
+                    <Link to={'../configUser'} className='configLink' state={{ config: 'password' }}>Mudar Senha</Link>
+                    <Link to={'../configUser'} className='configLink' state={{ config: 'email' }}>Mudar Email</Link>
+                </div>
+                }
             </div>
         </>
     )

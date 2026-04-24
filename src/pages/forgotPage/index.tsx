@@ -18,7 +18,7 @@ export default function ForgotPassword() {
         if (error) {
             setError("Erro ao enviar email.")
         } else {
-            setError("Email de recuperação enviado.")
+            setError("Se o email estiver cadastrado, enviamos o link de recuperação de senha.")
         }
 
         setLoading(false)
