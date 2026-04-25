@@ -44,7 +44,7 @@ export default function Register({ setUser }: SignUpProps) {
     const { user } = await signUp(email, password, name);
     setUser(user ? { name: user.user_metadata.name, email: user.email!, password: '' } : null);
 
-      alert('Um e-mail de confirmação foi enviado ao endeeço cadastrado! Confirme seu e-mail para realizar o login')
+      alert('Um e-mail de confirmação foi enviado ao endereço cadastrado! Confirme seu e-mail para realizar o login')
 
       navigate('/')
     } catch (err) {
