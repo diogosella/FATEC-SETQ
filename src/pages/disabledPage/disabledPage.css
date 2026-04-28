@@ -84,3 +84,13 @@
     font-family: 'gotham-bold';
     font-size: 30px;
 }
+
+@media (max-width: 768px) {
+    .pageContainer {
+        width: 100%;
+    }
+
+    .closedSubtitle {
+        width: 80%;
+    }
+}

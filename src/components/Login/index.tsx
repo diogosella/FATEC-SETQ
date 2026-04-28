@@ -47,6 +47,7 @@ const [loading, setLoading] = useState(false)
                 <p className='formLabel'>Senha</p>
                 <input type="password" className='inputArea' placeholder="Insira sua senha" value={password} onChange={(e) => setPassword(e.target.value) }/>
             </form>
+            <Link to={'/forgotPassword'} className="passwordButton">Esqueceu sua senha?</Link>
                 <button className='mainButton' onClick={handleLogin} disabled={loading}>
                    {loading ? (<img src="src\assets\images\loading.gif" className="loading"></img>) : ("Entrar")}
                     </button>

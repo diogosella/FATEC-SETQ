@@ -5,4 +5,12 @@
     width: 100%;
     box-shadow: 0 15px 20px black;
     margin: 6vh 0;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .signinInputContainer {
+        margin: 3vh 0;
+        padding: 22px;
+    }
 }
