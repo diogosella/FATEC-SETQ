@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function calcularTempo(): string {
     const agora = new Date()
@@ -44,6 +45,8 @@ function calcularTempo(): string {
 export default function Disabled() {
 
     const [timer, setTimer] = useState<string>(() => calcularTempo())
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -53,10 +56,38 @@ export default function Disabled() {
         return () => clearInterval(interval)
     }, [])
 
+
+    useEffect(() => {
+
+        const interval = setInterval(() => {
+
+            const agora = new Date()
+            const minutos = agora.getHours() * 60 + agora.getMinutes()
+
+            const h1430 = 14 * 60 + 30
+            const h1540 = 15 * 60 + 40
+
+            const h2030 = 20 * 60 + 30
+            const h2140 = 21 * 60 + 40
+
+            const horarioAberto =
+                (minutos >= h1430 && minutos < h1540) ||
+                (minutos >= h2030 && minutos < h2140)
+
+            if (horarioAberto) {
+                navigate('/teams')
+            }
+
+        }, 1000)
+
+        return () => clearInterval(interval)
+
+    }, [navigate])
+
     return (
         <div className="pageContainer">
             <Header/>        
-            
+
             <div className="closedSign">
                 <FontAwesomeIcon icon={faClock} className='closedIcon'/>
                 <p className='closedText'>Inscrições fechadas</p>

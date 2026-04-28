@@ -1,0 +1,76 @@
+/* ANIMAÇÃO */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* CONTAINER PRINCIPAL (igual disabled) */
+.pageContainer {
+    width: 35%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: white;
+}
+
+/* 🔥 FUNDO COM PADRÃO */
+.unavailableBg {
+  
+    background-size: 180px; /* 🔧 ajuste aqui o tamanho do padrão */
+    background-repeat: repeat;
+}
+
+/* BLOCO CENTRAL */
+.closedSign {
+    display: flex;
+    flex-direction: column;
+    margin: 20vh auto 0 auto;
+    align-items: center;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+}
+
+/* LOGO CENTRAL */
+.unavailableLogo {
+    width: 140px;
+    margin-bottom: 20px;
+}
+
+/* TEXTO PRINCIPAL */
+.closedText {
+    font-family: 'gotham-bold';
+    font-size: 20px;
+    text-align: center;
+}
+
+/* SUBTEXTO */
+.closedSubtitle {
+    width: 60%;
+    margin: 0 auto;
+    font-size: 12px;
+    text-align: center;
+    color: grey;
+    opacity: 0;
+    animation: slideUp 0.4s ease forwards;
+    animation-delay: 0.1s;
+}
+
+/* DESTAQUE */
+.closedInfo span {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+}
+
+/* CONTATO */
+.contact {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+    margin-top: 10px;
+}
