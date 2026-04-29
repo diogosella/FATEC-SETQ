@@ -7,7 +7,8 @@ import { useLocation } from 'react-router-dom'
 
 export default function ConfigUser() {
     const location = useLocation()
-    const config = location.state?.config || 'email'
+    const params = new URLSearchParams(location.search)
+    const config = params.get("config")
     const [newEmail, setEmail] = useState("")
     const [newPassword, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")

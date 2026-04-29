@@ -39,8 +39,8 @@ export default function Header() {
                     </div>
                 </div>
                 {open && <div className='menu'>
-                    <Link to={'../configUser'} className='configLink' state={{ config: 'password' }}>Mudar Senha</Link>
-                    <Link to={'../configUser'} className='configLink' state={{ config: 'email' }}>Mudar Email</Link>
+                    <Link to={'../configUser?config=password'} className='configLink'>Mudar Senha</Link>
+                    <Link to={'../configUser?config=email'} className='configLink'>Mudar Email</Link>
                 </div>
                 }
             </div>

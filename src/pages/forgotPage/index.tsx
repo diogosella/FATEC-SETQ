@@ -1,4 +1,4 @@
-import './passwordPage.css'
+import './forgotPage.css'
 import logo from '../../assets/images/logo-300.jpg'
 import { useState } from 'react'
 import { supabase } from "../../supabase.ts"
@@ -12,7 +12,7 @@ export default function ForgotPassword() {
         setLoading(true)
 
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: "http://localhost:5173/resetPassword"
+            redirectTo: "http://localhost:5173/configUser?config=password"
         })
 
         if (error) {
