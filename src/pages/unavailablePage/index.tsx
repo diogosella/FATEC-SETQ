@@ -25,9 +25,9 @@ export default function UnavailablePage() {
                     Caso queira usar em um evento próprio, entre em contato
                 </p>
 
-                <p className='contact'>
+                <a href="https://instagram.com/" className='contact'>
                     (14) 99999-9999
-                </p>
+                </a>
             </div>
 
         </div>
