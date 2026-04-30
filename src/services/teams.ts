@@ -137,15 +137,27 @@ export const leaveTeam = async (): Promise<void> => {
 
   if (error) throw error;
 
-const { count } = await supabase
+  const { count } = await supabase
     .from('user_team')
     .select('*', { count: 'exact', head: true })
     .eq('team_id', membership.team_id);
 
-if (count === 0) {
+  if (count === 0) {
     await deleteTeam(membership.team_id);
-}
+  } else if (count !== null && count < 6) {
 
+    const { error: updateError } = await supabase
+      .from('teams')
+      .update({ is_full: false })
+      .eq('id', membership.team_id);
+
+    if (updateError) throw updateError;
+
+    await supabase
+      .from('fullteams')
+      .delete()
+      .eq('team_id', membership.team_id);
+  }
 }
 
 export const getUserCurrentTeam = async (): Promise<TeamWithMembers | null> => {

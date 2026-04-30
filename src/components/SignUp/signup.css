@@ -14,3 +14,13 @@
         padding: 22px;
     }
 }
+
+.errorMsgRegister {
+    width: 400px;
+    margin: 4px auto 18px auto;
+    padding: 2px;
+    text-align: center;
+    color: white;
+    background-color:red;
+    border-radius: 100px;
+}
