@@ -61,7 +61,6 @@ export default function Register({ setUser }: SignUpProps) {
     return (
         <div className="signinInputContainer">
             <p className='textTitle'>Criar conta</p>
-            <h2>{error}</h2>
             <form onSubmit={(e) => e.preventDefault()}>
                 <p className='formLabel'>Nome Completo</p>
                 <input type="text" className='inputArea' placeholder="Insira seu nome completo" value={name} onChange={(e) => setName(e.target.value)} required/>
@@ -73,7 +72,7 @@ export default function Register({ setUser }: SignUpProps) {
                 <input type="password" className='inputArea' placeholder="Repita sua senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
                 <button className='mainButton' onClick={handleRegister}>Cadastrar</button>
             </form>
-                {error && <p>{error}</p>}
+                {error && <p>Erro ao cadastrar, tente novamente mais tarde</p>}
                 <Link to={'/'} className='secondaryButton'>Ja tenho conta</Link>
         </div>  
     ) 

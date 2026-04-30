@@ -8,7 +8,7 @@ import './teamsPage.css'
 
 export default function Teams() {
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const [createTeamOpen, setCreateTeamOpen] = useState(false);
 
@@ -27,34 +27,34 @@ export default function Teams() {
 
     const availableTeams = teams.filter(team => !team.is_full);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const interval = setInterval(() => {
+    //     const interval = setInterval(() => {
 
-            const agora = new Date()
-            const minutos = agora.getHours() * 60 + agora.getMinutes()
+    //         const agora = new Date()
+    //         const minutos = agora.getHours() * 60 + agora.getMinutes()
 
-            const h1430 = 14 * 60 + 30
-            const h1540 = 15 * 60 + 40
+    //         const h1430 = 14 * 60 + 30
+    //         const h1540 = 15 * 60 + 40
 
-            const h2030 = 20 * 60 + 30
-            const h2140 = 21 * 60 + 40
+    //         const h2030 = 20 * 60 + 30
+    //         const h2140 = 21 * 60 + 40
 
-            const foraDoHorario =
-                !(
-                    (minutos >= h1430 && minutos < h1540) ||
-                    (minutos >= h2030 && minutos < h2140)
-                )
+    //         const foraDoHorario =
+    //             !(
+    //                 (minutos >= h1430 && minutos < h1540) ||
+    //                 (minutos >= h2030 && minutos < h2140)
+    //             )
 
-            if (foraDoHorario) {
-                navigate('/disabled')
-            }
+    //         if (foraDoHorario) {
+    //             navigate('/disabled')
+    //         }
 
-        }, 1000)
+    //     }, 1000)
 
-        return () => clearInterval(interval)
+    //     return () => clearInterval(interval)
 
-    }, [navigate])
+    // }, [navigate])
 
     return (
         <div className="contentContainer">

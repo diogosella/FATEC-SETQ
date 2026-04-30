@@ -25,9 +25,9 @@ export default function UnavailablePage() {
                     Caso queira usar em um evento próprio, entre em contato
                 </p>
 
-                <p className='contact'>
-                    (14) 99999-9999
-                </p>
+                <a href='' className='contact'>
+                    Entrar no grupo do whatsapp
+                </a>
             </div>
 
         </div>
