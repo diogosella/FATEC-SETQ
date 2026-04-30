@@ -8,7 +8,7 @@ import './teamsPage.css'
 
 export default function Teams() {
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const [createTeamOpen, setCreateTeamOpen] = useState(false);
 

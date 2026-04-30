@@ -104,3 +104,13 @@
     color:rgb(209, 137, 4);
     transition: all ease 0.2s;
 }
+
+.errorMsgLogin {
+    width: 280px;
+    margin: 4px auto 18px auto;
+    padding: 2px;
+    text-align: center;
+    color: white;
+    background-color:red;
+    border-radius: 100px;
+}
