@@ -19,7 +19,7 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
     const slots = Array.from({ length: 6 });
 
     if (loading) return <img src="src\assets\images\loading.gif" className="loadingTeams" />;
-    if (error) return <div>Erro: {error}</div>;
+    if (error) return <div>Erro ao cadastrar</div>;
 
     return (
         <>
@@ -32,7 +32,7 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
                         className={`displayBox ${userTeamId === team.id ? 'myTeamBox' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}>
 
-                        <span className="badge">SEU TIME</span> 
+                        {userTeamId === team.id && <span className="badge">SEU TIME</span> }
                         <h1 className="teamName">{team.team_name}</h1>
                         <ul className="displayMembers">
                             {slots.map((_, index) => {
@@ -44,7 +44,7 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
                                 );
                             })}
                         </ul>
-                        <hr className="hrLine" />
+                        {userTeamId === team.id && <hr className="hrLine" />}
                         <div className="buttonContainer">
                             {userTeamId === team.id ? (
                                 <div className="alreadyTeamedContainer">

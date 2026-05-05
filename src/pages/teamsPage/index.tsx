@@ -38,19 +38,22 @@ export default function Teams() {
             const h1540 = 15 * 60 + 40
 
             const h2030 = 20 * 60 + 30
-            const h2140 = 21 * 60 + 40
+            const h2100 = 21 * 60
+            const h2130 = 21 * 60 + 30
 
-            const foraDoHorario =
-                !(
-                    (minutos >= h1430 && minutos < h1540) ||
-                    (minutos >= h2030 && minutos < h2140)
-                )
+        const dentroDoHorario =
+            (minutos >= h1430 && minutos < h1540) ||
+            (minutos >= h2030 && minutos < h2100);
 
-            if (foraDoHorario) {
+
+            if ((minutos >= h2100) && (minutos < h2130)) {
+                navigate('/matches')
+            } else if (!dentroDoHorario) {
                 navigate('/disabled')
             }
-
         }, 1000)
+
+        
 
         return () => clearInterval(interval)
 

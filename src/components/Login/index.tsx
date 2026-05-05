@@ -51,7 +51,7 @@ const [loading, setLoading] = useState(false)
                 <button className='mainButton' onClick={handleLogin} disabled={loading}>
                    {loading ? (<img src="src\assets\images\loading.gif" className="loading"></img>) : ("Entrar")}
                     </button>
-                {error && <p>{error}</p>}
+                {error && <p className="errorMsgLogin">Houve um erro ao realizar login</p>}
             <Link to={'/signup'} className='secondaryButton'>Cadastrar</Link>
         </div>
         </>

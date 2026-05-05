@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signUp } from "../../services/auth";
 import type { Dispatch, SetStateAction } from "react";
+import "./signup.css"
 
 export type User = {
   name: string,
@@ -21,47 +22,49 @@ export default function Register({ setUser }: SignUpProps) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleRegister = async () => {
-    setError(null)
+  setError(null)
 
-    if (!email || !password) {
-      setError('Preencha todos os campos')
-      return
-    }
+  if (!email || !password) {
+    setError('Preencha todos os campos')
+    return
+  }
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem')
-      return
-    }
+  if (password !== confirmPassword) {
+    setError('As senhas não coincidem')
+    return
+  }
 
-    if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres')
-      return
-    }
+  if (password.length < 6) {
+    setError('A senha deve ter pelo menos 6 caracteres')
+    return
+  }
 
-    try {
+  setLoading(true)
+  try {
     const { user } = await signUp(email, password, name);
     setUser(user ? { name: user.user_metadata.name, email: user.email!, password: '' } : null);
 
-      alert('Um e-mail de confirmação foi enviado ao endereço cadastrado! Confirme seu e-mail para realizar o login')
+    alert('Um e-mail de confirmação foi enviado ao endereço cadastrado! Confirme seu e-mail para realizar o login')
 
-      navigate('/')
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError('Erro ao cadastrar')
-      }
+    navigate('/')
+  } catch (err) {
+    console.error('Erro completo:', err);
+    if (err instanceof Error) {
+      setError(err.message)
+    } else {
+      setError('Erro ao cadastrar')
     }
+  } finally {
+    setLoading(false)
   }
-
-
+}
 
     return (
         <div className="signinInputContainer">
             <p className='textTitle'>Criar conta</p>
-            <h2>{error}</h2>
             <form onSubmit={(e) => e.preventDefault()}>
                 <p className='formLabel'>Nome Completo</p>
                 <input type="text" className='inputArea' placeholder="Insira seu nome completo" value={name} onChange={(e) => setName(e.target.value)} required/>
@@ -71,9 +74,11 @@ export default function Register({ setUser }: SignUpProps) {
                 <input type="password" className='inputArea' placeholder="Insira sua senha" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                 <p className='formLabel'>Confirmar senha</p>
                 <input type="password" className='inputArea' placeholder="Repita sua senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
-                <button className='mainButton' onClick={handleRegister}>Cadastrar</button>
+                <button className='mainButton' onClick={handleRegister} disabled={loading}>
+                    {loading ? (<img src="src/assets/images/loading.gif" className="loading" />) : ("Cadastrar")}
+                </button>
             </form>
-                {error && <p>{error}</p>}
+                {error && <p className="errorMsgRegister">Houve um erro ao cadastrar, tente novamente</p>}
                 <Link to={'/'} className='secondaryButton'>Ja tenho conta</Link>
         </div>  
     ) 
