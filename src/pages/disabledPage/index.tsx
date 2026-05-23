@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { clearAllTeamsIfCycleEnded } from '../../services/teams'
+import { transferUnplayedTeamsIfCycleEnded } from '../../services/teams'
 
 function calcularTempo(): string {
     const agora = new Date()
@@ -49,8 +49,8 @@ export default function Disabled() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        clearAllTeamsIfCycleEnded().catch((err) => {
-            console.warn('Falha ao limpar banco de times do ciclo:', err)
+        transferUnplayedTeamsIfCycleEnded().catch((err) => {
+            console.warn('Falha ao encerrar/transferir ciclo de times:', err)
         })
     }, [])
 

@@ -1,5 +1,5 @@
 import { supabase } from '../supabase.ts';
-import type { Team, TeamMember, TeamWithMembers } from '../../backend/src/types/team.ts';
+import type { Team, TeamMember, TeamWithMembers, CyclePeriod } from '../../backend/src/types/team.ts';
 
 export const getTeams = async (): Promise<TeamWithMembers[]> => {
   const { data, error } = await supabase
@@ -47,7 +47,6 @@ export const createTeam = async (team_name: string): Promise<void> => {
 };
 
 export const updateTeam = async (id: number, updates: Partial<Team>): Promise<Team> => {
-
   const { data, error } = await supabase
     .from('teams')
     .update(updates)
@@ -98,7 +97,7 @@ export const getUserTeam = async (): Promise<number | null> => {
     .from('user_team')
     .select('team_id')
     .eq('user_id', user.id)
-    .maybeSingle(); 
+    .maybeSingle();
 
   if (error) return null;
   return data?.team_id ?? null;
@@ -144,7 +143,6 @@ export const leaveTeam = async (): Promise<void> => {
   if (count === 0) {
     await deleteTeam(membership.team_id);
   } else if (count !== null && count < 6) {
-
     const { error: updateError } = await supabase
       .from('teams')
       .update({ is_full: false })
@@ -183,10 +181,42 @@ export const getUserCurrentTeam = async (): Promise<TeamWithMembers | null> => {
   return (Array.isArray(data.teams) ? data.teams[0] : data.teams) as unknown as TeamWithMembers;
 };
 
+const pad = (n: number) => n.toString().padStart(2, '0');
+const dateKey = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+const periodForNow = (now: Date): CyclePeriod => {
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  return minutes < 18 * 60 ? 'vespertino' : 'noturno';
+};
+
+export const getCurrentCycleInfo = (): { period: CyclePeriod; date: string } => {
+  const now = new Date();
+  return { period: periodForNow(now), date: dateKey(now) };
+};
+
+const nextBusinessDateKey = (from: Date): string => {
+  const next = new Date(from);
+  next.setDate(next.getDate() + 1);
+  const dow = next.getDay();
+  if (dow === 6) next.setDate(next.getDate() + 2);
+  if (dow === 0) next.setDate(next.getDate() + 1);
+  return dateKey(next);
+};
+
 export const registerFullTeam = async (team_id: number, team_name: string): Promise<void> => {
+  const { period, date } = getCurrentCycleInfo();
+  const now = new Date().toISOString();
   const { error } = await supabase
     .from('fullteams')
-    .insert([{ team_id, team_name }]);
+    .insert([{
+      team_id,
+      team_name,
+      filled_at: now,
+      original_filled_at: now,
+      cycle_period: period,
+      cycle_date: date,
+      transferred: false,
+    }]);
 
   if (error) throw error;
 };
@@ -201,10 +231,14 @@ export const markTeamAsFull = async (team_id: number): Promise<void> => {
 };
 
 export const getFullTeams = async () => {
+  const { period, date } = getCurrentCycleInfo();
   const { data, error } = await supabase
     .from('fullteams')
     .select('*')
-    .order('filled_at', { ascending: true });
+    .eq('cycle_period', period)
+    .lte('cycle_date', date)
+    .order('transferred', { ascending: false })
+    .order('original_filled_at', { ascending: true });
 
   if (error) throw error;
   return data ?? [];
@@ -225,36 +259,12 @@ export const declareWinner = async (
 
   if (error) throw error;
 };
-export const clearAllTeams = async (): Promise<void> => {
-  const { error: userTeamErr } = await supabase
-    .from('user_team')
-    .delete()
-    .neq('user_id', '00000000-0000-0000-0000-000000000000');
-
-  if (userTeamErr) throw userTeamErr;
-
-  const { error: fullTeamsErr } = await supabase
-    .from('fullteams')
-    .delete()
-    .neq('id', 0);
-
-  if (fullTeamsErr) throw fullTeamsErr;
-
-  const { error: teamsErr } = await supabase
-    .from('teams')
-    .delete()
-    .neq('id', 0);
-
-  if (teamsErr) throw teamsErr;
-};
 
 const CLEANUP_STORAGE_KEY = 'setq_last_cleanup_cycle';
 
-const getCycleToClean = (): string | null => {
+const getCycleToClean = (): { id: string; period: CyclePeriod; date: string } | null => {
   const now = new Date();
-  const dayKey = `${now.getFullYear()}-${(now.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+  const day = dateKey(now);
   const minutes = now.getHours() * 60 + now.getMinutes();
 
   const vespertinoEnd = 15 * 60 + 40;
@@ -262,36 +272,94 @@ const getCycleToClean = (): string | null => {
   const noturnoEnd = 21 * 60 + 30;
 
   if (minutes >= vespertinoEnd && minutes < noturnoStart) {
-    return `${dayKey}_vespertino`;
+    return { id: `${day}_vespertino`, period: 'vespertino', date: day };
   }
-
   if (minutes >= noturnoEnd) {
-    return `${dayKey}_noturno`;
+    return { id: `${day}_noturno`, period: 'noturno', date: day };
   }
-
   return null;
 };
 
-export const clearAllTeamsIfCycleEnded = async (): Promise<boolean> => {
-  const cycleId = getCycleToClean();
-  if (!cycleId) return false;
+const closeOldCycle = async (period: CyclePeriod, date: string): Promise<void> => {
+  const { data: ciclo, error: ciclErr } = await supabase
+    .from('fullteams')
+    .select('team_id')
+    .eq('cycle_period', period)
+    .eq('cycle_date', date);
+  if (ciclErr) throw ciclErr;
+
+  const teamIdsDoCiclo: number[] = (ciclo ?? []).map((r: { team_id: number }) => r.team_id);
+  if (teamIdsDoCiclo.length === 0) return;
+
+  const cycleIdMatches = `${date}_${period}`;
+  const { data: matches, error: matchesErr } = await supabase
+    .from('matches')
+    .select('winner_team_id, loser_team_id')
+    .eq('cycle_id', cycleIdMatches);
+  if (matchesErr) throw matchesErr;
+
+  const teamsQueJogaram = new Set<number>();
+  (matches ?? []).forEach((m: { winner_team_id: number | null; loser_team_id: number | null }) => {
+    if (m.winner_team_id != null) teamsQueJogaram.add(m.winner_team_id);
+    if (m.loser_team_id != null) teamsQueJogaram.add(m.loser_team_id);
+  });
+
+  const sobreviventes = teamIdsDoCiclo.filter((id) => !teamsQueJogaram.has(id));
+  const aDeletar = teamIdsDoCiclo.filter((id) => teamsQueJogaram.has(id));
+
+  if (sobreviventes.length > 0) {
+    const nextDate = nextBusinessDateKey(new Date(date + 'T12:00:00'));
+    const { error: updErr } = await supabase
+      .from('fullteams')
+      .update({ cycle_date: nextDate, transferred: true })
+      .in('team_id', sobreviventes);
+    if (updErr) throw updErr;
+  }
+
+  if (aDeletar.length > 0) {
+    const { error: utErr } = await supabase.from('user_team').delete().in('team_id', aDeletar);
+    if (utErr) throw utErr;
+    const { error: ftErr } = await supabase.from('fullteams').delete().in('team_id', aDeletar);
+    if (ftErr) throw ftErr;
+    const { error: tErr } = await supabase.from('teams').delete().in('id', aDeletar);
+    if (tErr) throw tErr;
+  }
+
+  const { data: surviving } = await supabase.from('fullteams').select('team_id');
+  const survivingSet = new Set<number>((surviving ?? []).map((r: { team_id: number }) => r.team_id));
+  const { data: allTeams } = await supabase.from('teams').select('id');
+  const incompletos: number[] = (allTeams ?? [])
+    .map((r: { id: number }) => r.id)
+    .filter((id: number) => !survivingSet.has(id));
+
+  if (incompletos.length > 0) {
+    await supabase.from('user_team').delete().in('team_id', incompletos);
+    await supabase.from('teams').delete().in('id', incompletos);
+  }
+};
+
+export const transferUnplayedTeamsIfCycleEnded = async (): Promise<boolean> => {
+  const cycle = getCycleToClean();
+  if (!cycle) return false;
 
   const lastCleaned =
     typeof window !== 'undefined' ? window.localStorage.getItem(CLEANUP_STORAGE_KEY) : null;
-  if (lastCleaned === cycleId) return false;
+  if (lastCleaned === cycle.id) return false;
 
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem(CLEANUP_STORAGE_KEY, cycleId);
+    window.localStorage.setItem(CLEANUP_STORAGE_KEY, cycle.id);
   }
 
   try {
-    await clearAllTeams();
+    await closeOldCycle(cycle.period, cycle.date);
     return true;
   } catch (err) {
-    if (typeof window !== 'undefined' && lastCleaned !== null) {
-      window.localStorage.setItem(CLEANUP_STORAGE_KEY, lastCleaned);
-    } else if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(CLEANUP_STORAGE_KEY);
+    if (typeof window !== 'undefined') {
+      if (lastCleaned !== null) {
+        window.localStorage.setItem(CLEANUP_STORAGE_KEY, lastCleaned);
+      } else {
+        window.localStorage.removeItem(CLEANUP_STORAGE_KEY);
+      }
     }
     throw err;
   }

@@ -1,6 +1,6 @@
 import './header.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRightFromBracket, faGear, faUserShield } from '@fortawesome/free-solid-svg-icons'
+import { faRightFromBracket, faGear, faUserShield, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -11,7 +11,7 @@ export default function Header() {
     const [open, setOpen] = useState(false)
     const [adminOpen, setAdminOpen] = useState(false)
     const navigate = useNavigate()
-    const { isAdmin } = useAuth()
+    const { user, isAdmin } = useAuth()
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -28,6 +28,10 @@ export default function Header() {
         if (open) setOpen(false)
     }
 
+    const handleMyMatches = () => {
+        navigate('/myMatches')
+    }
+
     const closeAdminMenu = () => setAdminOpen(false)
 
     return (
@@ -39,6 +43,13 @@ export default function Header() {
                     {isAdmin && <span className='adminBadge'>ADMIN</span>}
                 </div>
                 <div className="icons">
+                    {user && (
+                        <div className="myMatchesBtn">
+                            <button onClick={handleMyMatches} title="Minhas partidas">
+                                <FontAwesomeIcon className='myMatchesIcon' icon={faClockRotateLeft} />
+                            </button>
+                        </div>
+                    )}
                     {isAdmin && (
                         <div className="admin">
                             <button onClick={handleAdmin}>

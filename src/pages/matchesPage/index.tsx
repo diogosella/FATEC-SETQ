@@ -3,11 +3,16 @@ import Header from '../../components/Header';
 import { useMatches } from '../../hooks/useMatches';
 import { useAuth } from '../../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import './matchesPage.css';
 
+const formatTime = (iso: string) => {
+    const d = new Date(iso);
+    return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+};
+
 export default function MatchesPage() {
-    const { teamA, teamB, queue, loading, declaring, handleDeclareWinner } = useMatches();
+    const { teamA, teamB, queue, recentResults, loading, declaring, handleDeclareWinner } = useMatches();
     const { isAdmin } = useAuth();
 
     const [pendingWinner, setPendingWinner] = useState<'A' | 'B' | null>(null);
@@ -36,22 +41,26 @@ export default function MatchesPage() {
                 <img src="src\assets\images\loading.gif" className="loadingFull" />
             ) : (
                 <>
-                    
                     <div className="currentMatch">
                         <h1 className='matchupTitle'>Jogando agora</h1>
                         <div className="matchup">
                             <div className='TeamA'>
                                 <FontAwesomeIcon icon={faA} className='faA' />
                                 {teamA ? teamA.team_name : 'Aguardando time...'}
+                                {teamA?.transferred && (
+                                    <span className='matchupTransferBadge' title='Time transferido do ciclo anterior'>TRANSFERIDO</span>
+                                )}
                             </div>
                             <span className="vs">VS</span>
                             <div className='TeamB'>
                                 <FontAwesomeIcon icon={faB} className='faB' />
                                 {teamB ? teamB.team_name : 'Aguardando time...'}
+                                {teamB?.transferred && (
+                                    <span className='matchupTransferBadge' title='Time transferido do ciclo anterior'>TRANSFERIDO</span>
+                                )}
                             </div>
                         </div>
 
-                        
                         {isAdmin && teamA && teamB && (
                             <div className="adminControls">
                                 <p className="adminControlsTitle">
@@ -77,7 +86,6 @@ export default function MatchesPage() {
                         )}
                     </div>
 
-                    
                     <div className="teamsList">
                         <div className="queueHeader">
                             <h2 className='teamsListTitle'>
@@ -104,16 +112,53 @@ export default function MatchesPage() {
                                 {queue.map((team, index) => (
                                     <li
                                         key={team.id}
-                                        className={`queueItem ${index === 0 ? 'queueItemNext' : ''}`}
+                                        className={`queueItem ${index === 0 ? 'queueItemNext' : ''} ${team.transferred ? 'queueItemTransferred' : ''}`}
                                         style={{ animationDelay: `${index * 0.08}s` }}
                                     >
-                                        <span className="queuePosition">
-                                            {index + 1}
-                                        </span>
+                                        <span className="queuePosition">{index + 1}</span>
                                         <span className="queueTeamName">{team.team_name}</span>
-                                        {index === 0 && (
+                                        {team.transferred && (
+                                            <span className="queueTransferBadge" title="Time transferido do ciclo anterior">TRANSFERIDO</span>
+                                        )}
+                                        {index === 0 && !team.transferred && (
                                             <span className="queueNextBadge">PRÓXIMO</span>
                                         )}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    <div className="resultsList">
+                        <div className="queueHeader">
+                            <h2 className='teamsListTitle'>
+                                <FontAwesomeIcon icon={faClockRotateLeft} className='queueHeaderIcon' />
+                                Últimos resultados
+                            </h2>
+                            {recentResults.length > 0 && (
+                                <span className='queueCount'>{recentResults.length} {recentResults.length === 1 ? 'partida' : 'partidas'}</span>
+                            )}
+                        </div>
+                        {recentResults.length === 0 ? (
+                            <div className="noTeamsRegistered">
+                                <p className='noTeamsRegisteredText'>Nenhuma partida concluída</p>
+                            </div>
+                        ) : (
+                            <ul className="resultsItems">
+                                {recentResults.map((r, index) => (
+                                    <li
+                                        key={r.id}
+                                        className='resultItem'
+                                        style={{ animationDelay: `${index * 0.06}s` }}
+                                    >
+                                        <span className='resultTime'>{formatTime(r.created_at)}</span>
+                                        <div className='resultBody'>
+                                            <span className='resultWinner'>
+                                                <FontAwesomeIcon icon={faTrophy} /> {r.winner_team_name}
+                                            </span>
+                                            <span className='resultVs'>venceu</span>
+                                            <span className='resultLoser'>{r.loser_team_name}</span>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
@@ -122,7 +167,6 @@ export default function MatchesPage() {
                 </>
             )}
 
-            
             {pendingWinner && pendingTeamName && (
                 <>
                     <div className="confirmOverlay" onClick={closeConfirm}></div>

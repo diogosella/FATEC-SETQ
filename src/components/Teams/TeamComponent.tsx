@@ -25,7 +25,7 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
         <>
             {teams.map((team, index) => {
                 const members = team.user_team ?? [];
-                const isJoiningThis = joining === team.id; 
+                const isJoiningThis = joining === team.id;
 
                 return (
                         <div key={team.id}
@@ -37,9 +37,15 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
                         <ul className="displayMembers">
                             {slots.map((_, index) => {
                                 const member = members[index];
+                                const fullName = member?.users?.name;
+                                const displayName = fullName
+                                    ? fullName.split(' ').slice(0, 2).join(' ')
+                                    : member
+                                        ? 'Jogador'
+                                        : 'Vaga aberta';
                                 return (
                                     <li key={index} className={member ? "filledSpot" : "freeSpot"}>
-                                        {member ? member.users.name.split(' ').slice(0, 2).join(' ') : "Vaga aberta"}
+                                        {displayName}
                                     </li>
                                 );
                             })}
@@ -66,10 +72,10 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
                                 <button
                                     className="joinButton"
                                     onClick={() => handleJoinTeam(team.id)}
-                                    disabled={userTeamId !== null || joining !== null} 
+                                    disabled={userTeamId !== null || joining !== null}
                                 >
                                     {isJoiningThis ? (
-                                        (<img src="src\assets\images\loading.gif" className="loading"></img>) 
+                                        (<img src="src\assets\images\loading.gif" className="loading"></img>)
                                     ) : (
                                         <>
                                             <FontAwesomeIcon className="joinIcon" icon={faArrowRightLong} />

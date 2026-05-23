@@ -28,9 +28,15 @@ export interface TeamWithMembers extends Team {
   }[];
 }
 
+export type CyclePeriod = 'vespertino' | 'noturno';
+
 export interface FullTeam {
   id: number;
   team_id: number;
   team_name: string;
   filled_at: string;
+  cycle_period: CyclePeriod;
+  cycle_date: string;
+  transferred: boolean;
+  original_filled_at: string;
 }

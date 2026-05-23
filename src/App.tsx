@@ -9,7 +9,8 @@ import Teams from './pages/teamsPage';
 import PrivateRoute from './PrivateRoute';
 import MatchesPage from './pages/matchesPage';
 import ForgotPassword from './pages/forgotPage';
-import ConfigUser from './pages/configPage'
+import ConfigUser from './pages/configPage';
+import MyMatchesPage from './pages/myMatchesPage';
 
 function App() {
 
@@ -19,7 +20,6 @@ function App() {
     const checkWeekend = () => {
       const hoje = new Date().getDay()
 
-      
       if (hoje === 0 || hoje === 6) {
         navigate('/offline')
       }
@@ -47,6 +47,15 @@ function App() {
         element={
           <PrivateRoute>
             <Teams />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path='/myMatches'
+        element={
+          <PrivateRoute>
+            <MyMatchesPage />
           </PrivateRoute>
         }
       />

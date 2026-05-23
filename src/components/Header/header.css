@@ -164,3 +164,19 @@
 .adminLink:hover {
     background-color: var(--main-orange);
 }
+.myMatchesBtn button {
+    background: transparent;
+    border: none;
+}
+
+.myMatchesIcon {
+    font-size: 20px;
+    color: white;
+    margin-right: 14px;
+    transition: all ease 0.1s;
+    cursor: pointer;
+}
+
+.myMatchesIcon:hover {
+    color: rgb(255, 212, 112);
+}
