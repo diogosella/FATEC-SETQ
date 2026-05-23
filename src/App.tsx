@@ -19,7 +19,7 @@ function App() {
     const checkWeekend = () => {
       const hoje = new Date().getDay()
 
-      // 0 = domingo | 6 = sábado
+      
       if (hoje === 0 || hoje === 6) {
         navigate('/offline')
       }

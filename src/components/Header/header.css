@@ -96,3 +96,71 @@
     text-decoration: none;
     color: white;
 }
+
+.adminBadge {
+    font-family: 'gotham-bold';
+    font-size: 11px;
+    color: var(--main-orange);
+    background-color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    letter-spacing: 0.5px;
+}
+
+.admin button {
+    background: transparent;
+    border: none;
+}
+
+.adminIcon {
+    font-size: 20px;
+    color: white;
+    margin-right: 14px;
+    transition: all ease 0.1s;
+}
+
+.adminIcon:hover {
+    cursor: pointer;
+    color: rgb(255, 212, 112);
+}
+
+.adminMenu {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    right: 0;
+    width: 50%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 212, 112);
+    animation: slideDown 0.2s ease forwards;
+    border-radius: 0 0 8px 8px;
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.adminMenuTitle {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+    font-size: 12px;
+    letter-spacing: 0.8px;
+    text-align: center;
+    margin: 4px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(245, 134, 52, 0.3);
+}
+
+.adminLink {
+    padding: 10px 16px;
+    text-decoration: none;
+    color: white;
+    font-family: 'gotham';
+    font-size: 14px;
+    transition: background-color 0.15s ease;
+}
+
+.adminLink:hover {
+    background-color: var(--main-orange);
+}

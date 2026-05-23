@@ -25,7 +25,6 @@ async function getUser(req, res, next) {
   next();
 }
 
-// 👤 rota para pegar dados do usuário logado
 router.get('/me', getUser, async (req, res) => {
   return res.json({ user: req.user });
 });

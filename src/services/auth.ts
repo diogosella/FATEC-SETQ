@@ -31,3 +31,14 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
+
+export async function isUserAdmin(authId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('is_admin')
+    .eq('auth_id', authId)
+    .maybeSingle();
+
+  if (error || !data) return false;
+  return Boolean(data.is_admin);
+}

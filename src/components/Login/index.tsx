@@ -3,10 +3,6 @@ import "../Login/login.css"
 import { useState } from 'react'
 import { signIn } from '../../services/auth.ts'
 
-const now = new Date();
-const hour = now.getHours();
-const minute = now.getMinutes();
-
 export default function Login() {
 const navigate = useNavigate();
 const [email, setEmail] = useState<string>('')
@@ -17,15 +13,20 @@ const [loading, setLoading] = useState(false)
   const handleLogin = async () => {
     try {
         setLoading(true)
-    await signIn(email, password)
-          if ((hour == 14 && minute == 30) || (hour == 20 && minute == 30)) {
+        await signIn(email, password)
+
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        if ((hour == 14 && minute == 30) || (hour == 20 && minute == 30)) {
             navigate('/teams')
-          }
-          else if (hour == 15 || hour == 21) {
+        }
+        else if (hour == 15 || hour == 21) {
             navigate('/teams')
-          } else {
+        } else {
             navigate('/disabled')
-          }
+        }
     } catch (err) {
     if (err instanceof Error) {
         setError(err.message)

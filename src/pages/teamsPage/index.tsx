@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import TeamComponent from "../../components/Teams/TeamComponent";
 import { useTeams } from "../../hooks/useTeams";
-import CreateTeam from "../../components/Teams/CreateTeam"; 
+import CreateTeam from "../../components/Teams/CreateTeam";
 import './teamsPage.css'
 
 export default function Teams() {
@@ -45,15 +45,12 @@ export default function Teams() {
             (minutos >= h1430 && minutos < h1540) ||
             (minutos >= h2030 && minutos < h2100);
 
-
             if ((minutos >= h2100) && (minutos < h2130)) {
                 navigate('/matches')
             } else if (!dentroDoHorario) {
                 navigate('/disabled')
             }
         }, 1000)
-
-        
 
         return () => clearInterval(interval)
 

@@ -19,7 +19,6 @@ export const getTeams = async (): Promise<TeamWithMembers[]> => {
   return data ?? [];
 };
 
-
 export const createTeam = async (team_name: string): Promise<void> => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Usuário não autenticado');
@@ -201,7 +200,6 @@ export const markTeamAsFull = async (team_id: number): Promise<void> => {
   if (error) throw error;
 };
 
-
 export const getFullTeams = async () => {
   const { data, error } = await supabase
     .from('fullteams')
@@ -210,4 +208,91 @@ export const getFullTeams = async () => {
 
   if (error) throw error;
   return data ?? [];
+};
+
+export const declareWinner = async (
+  winnerTeamId: number,
+  loserTeamId: number
+): Promise<void> => {
+  if (winnerTeamId === loserTeamId) {
+    throw new Error('Vencedor e perdedor não podem ser o mesmo time');
+  }
+
+  const { error } = await supabase
+    .from('fullteams')
+    .update({ filled_at: new Date().toISOString() })
+    .eq('team_id', loserTeamId);
+
+  if (error) throw error;
+};
+export const clearAllTeams = async (): Promise<void> => {
+  const { error: userTeamErr } = await supabase
+    .from('user_team')
+    .delete()
+    .neq('user_id', '00000000-0000-0000-0000-000000000000');
+
+  if (userTeamErr) throw userTeamErr;
+
+  const { error: fullTeamsErr } = await supabase
+    .from('fullteams')
+    .delete()
+    .neq('id', 0);
+
+  if (fullTeamsErr) throw fullTeamsErr;
+
+  const { error: teamsErr } = await supabase
+    .from('teams')
+    .delete()
+    .neq('id', 0);
+
+  if (teamsErr) throw teamsErr;
+};
+
+const CLEANUP_STORAGE_KEY = 'setq_last_cleanup_cycle';
+
+const getCycleToClean = (): string | null => {
+  const now = new Date();
+  const dayKey = `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+  const minutes = now.getHours() * 60 + now.getMinutes();
+
+  const vespertinoEnd = 15 * 60 + 40;
+  const noturnoStart = 20 * 60 + 30;
+  const noturnoEnd = 21 * 60 + 30;
+
+  if (minutes >= vespertinoEnd && minutes < noturnoStart) {
+    return `${dayKey}_vespertino`;
+  }
+
+  if (minutes >= noturnoEnd) {
+    return `${dayKey}_noturno`;
+  }
+
+  return null;
+};
+
+export const clearAllTeamsIfCycleEnded = async (): Promise<boolean> => {
+  const cycleId = getCycleToClean();
+  if (!cycleId) return false;
+
+  const lastCleaned =
+    typeof window !== 'undefined' ? window.localStorage.getItem(CLEANUP_STORAGE_KEY) : null;
+  if (lastCleaned === cycleId) return false;
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(CLEANUP_STORAGE_KEY, cycleId);
+  }
+
+  try {
+    await clearAllTeams();
+    return true;
+  } catch (err) {
+    if (typeof window !== 'undefined' && lastCleaned !== null) {
+      window.localStorage.setItem(CLEANUP_STORAGE_KEY, lastCleaned);
+    } else if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(CLEANUP_STORAGE_KEY);
+    }
+    throw err;
+  }
 };
