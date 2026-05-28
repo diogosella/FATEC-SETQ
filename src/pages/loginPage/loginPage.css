@@ -1,21 +1,22 @@
-
 body {
     background-image: url(../../assets/images/background.jpg);
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     height: 100vh;
     font-family: 'gotham';
     overflow: hidden;
 }
 
 .credentialsContainer {
+    width: 90%;
+    max-width: 420px;
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    width: 25%;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .logoContainer {
@@ -24,26 +25,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 62px 0 28px 0;
+    margin: 8vh 0 24px 0;
+    text-align: center;
 }
 
 .logoContainer img {
     width: 100px;
+    max-width: 60%;
+    height: auto;
 }
 
-@media (max-width: 768px) {
-    body {
-        background-size: cover;
-    }
-
-    .credentialsContainer {
-        width: 85%;
-    }
-
+@media (max-width: 600px) {
     .logoContainer {
-        margin: 8vh 0 24px 0;
+        margin: 6vh 0 18px 0;
     }
-
     .logoContainer img {
         width: 80px;
     }

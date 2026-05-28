@@ -12,36 +12,18 @@
 .closedSign {
     display: flex;
     flex-direction: column;
-    margin: 25vh auto 0 auto;
+    margin: 20vh auto 0 auto;
     align-items: center;
     opacity: 0;
     animation: slideUp 0.4s ease forwards;
-    animation-delay: 0s;
-}
-
-.pageContainer {
-    width: 35%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    background-color: white;
-
-}
-
-.closedSign {
-    display: flex;
-    flex-direction: column;
-    margin: 25vh auto 0 auto;
-    align-items: center;
-    opacity: 0;
-    animation: slideUp 0.4s ease forwards;
-    animation-delay: 0s;
+    padding: 0 16px;
+    text-align: center;
 }
 
 .closedText {
     font-family: 'gotham-bold';
-    font-size: 20px;
+    font-size: clamp(18px, 4vw, 22px);
+    text-align: center;
 }
 
 .closedIcon {
@@ -49,7 +31,8 @@
 }
 
 .closedSubtitle {
-    width: 50%;
+    width: 80%;
+    max-width: 480px;
     margin: 0 auto;
     font-size: 12px;
     text-align: center;
@@ -57,6 +40,8 @@
     opacity: 0;
     animation: slideUp 0.4s ease forwards;
     animation-delay: 0.1s;
+    padding: 0 8px;
+    box-sizing: border-box;
 }
 
 .closedInfo span {
@@ -69,25 +54,22 @@
     opacity: 0;
     animation: slideUp 0.4s ease forwards;
     animation-delay: 0.2s;
+    padding: 0 16px;
 }
 
 .timerTitle {
     font-size: 12px;
-    margin: 64px 0 0 0;
+    margin: 48px 0 0 0;
     color: grey;
 }
 
 .timer {
     font-family: 'gotham-bold';
-    font-size: 30px;
+    font-size: clamp(24px, 6vw, 30px);
 }
 
-@media (max-width: 768px) {
-    .pageContainer {
-        width: 100%;
-    }
-
-    .closedSubtitle {
-        width: 80%;
+@media (max-width: 600px) {
+    .closedSign {
+        margin-top: 15vh;
     }
 }

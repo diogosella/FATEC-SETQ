@@ -1,22 +1,23 @@
-
-
 .componentTitle {
-    font-size: 32px;
+    font-size: clamp(20px, 5vw, 32px);
     font-family: 'gotham-bold';
     color: var(--main-orange);
     margin: 0;
+    word-break: break-word;
 }
 
 .createTeamHeadline {
     display: flex;
-    align-items: center;    
+    align-items: center;
     justify-content: space-between;
     margin: 22px 0;
+    gap: 12px;
 }
 
 .createTeamForm {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .createTeamLabel {
@@ -24,25 +25,29 @@
 }
 
 .createTeamInput {
-    width: 420px;
+    width: 100%;
+    max-width: 100%;
     height: 36px;
     margin-top: 8px;
     border: none;
     background-color: var(--faded-gray);
     outline: none;
     border-radius: 5px;
-    padding: 0 8px;
+    padding: 0 10px;
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
 .createTeamButton {
-    width: 180px;
-    margin-top: 12px;
+    width: 60%;
+    max-width: 220px;
+    margin-top: 16px;
     align-self: center;
     color: white;
     background-color: var(--main-orange);
     border: none;
     border-radius: 5px;
-    padding: 8px;
+    padding: 10px;
     font-family: 'gotham-bold';
     cursor: pointer;
 }
@@ -53,31 +58,17 @@
 }
 
 .createTeamCloseButton {
-    padding: 6px;
+    padding: 6px 8px;
     color: var(--main-orange);
     background-color: rgba(255, 166, 0, 0.406);
-    border: solid 0.1px var(--main-orange);
+    border: 1px solid var(--main-orange);
     border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 .createTeamCloseButton:hover {
-    cursor: pointer;
     background-color: orange;
     color: white;
     transition: 0.3s;
-}
-
-@media (max-width: 768px) {
-    .createTeamInput {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .createTeamButton {
-        width: 60%;
-    }
-
-    .componentTitle {
-        font-size: 26px;
-    }
 }

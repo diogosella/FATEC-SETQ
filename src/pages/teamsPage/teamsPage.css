@@ -20,43 +20,20 @@
     }
 }
 
-.contentContainer {
-    width: 35%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    background-color: white;
-    overflow-y: auto;
-}
-
-.contentContainer::-webkit-scrollbar {
-    width: 4px;
-}
-
-.contentContainer::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.contentContainer::-webkit-scrollbar-thumb {
-    background-color: var(--main-orange);
-    border-radius: 10px;
-}
-
 .teamsTitle {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 5vh;
-    margin-bottom: 2vh;
+    width: 90%;
+    max-width: 100%;
+    margin: 5vh auto 2vh auto;
 }
 
 .teamsText {
     color: var(--main-orange);
     margin: 0;
+    font-size: clamp(20px, 4.5vw, 28px);
 }
 
 .availableTeams {
-    font-size: 22px;
+    font-size: clamp(18px, 3.5vw, 22px);
     margin-bottom: 2vh;
     color: var(--main-orange);
     font-family: "gotham-bold";
@@ -68,15 +45,14 @@
     margin-top: 1vh;
 }
 
-.teamsSelection{
-    width: 80%;
+.teamsSelection {
+    width: 90%;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
-    margin-bottom: 5vh;
+    margin: 0 auto 5vh auto;
 }
 
-.teamsButton{
+.teamsButton {
     font-size: 17px;
     padding: 10px;
     border-radius: 10px;
@@ -87,7 +63,7 @@
     cursor: pointer;
 }
 
-.teamsButton:hover{
+.teamsButton:hover {
     background-color: orange;
     transition: 0.2s;
 }
@@ -96,36 +72,35 @@
     font-size: 17px;
     padding: 6px;
     border-radius: 10px;
-      border: 1px solid var(--main-orange);
+    border: 1px solid var(--main-orange);
     color: var(--main-orange);
-    background-color: none;
+    background-color: transparent;
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 10;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10;
 }
 
 .createTeamComponent {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: min(90vw, 500px);
-  max-height: 90vh;
-  box-sizing: border-box;
-  background: white;
-  padding: 22px 20px;
-  z-index: 99;
-  border-radius: 8px;
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  animation: modalSlideUp 0.4s ease forwards;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 500px;
+    max-height: 90vh;
+    box-sizing: border-box;
+    background: white;
+    padding: 22px 20px;
+    z-index: 99;
+    border-radius: 8px;
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    animation: modalSlideUp 0.4s ease forwards;
+    overflow-y: auto;
 }
 
 .createTeamCloseButton {
@@ -136,15 +111,4 @@
 
 .currentTeamDisplay {
     position: relative;
-}
-
-@media (max-width: 768px) {
-    .contentContainer {
-        width: 100%;
-    }
-
-    .teamsTitle,
-    .teamsSelection {
-        width: 90%;
-    }
 }

@@ -6,8 +6,8 @@ type Props = {
   children: ReactNode
 }
 
-export default function PrivateRoute({ children }: Props) {
-  const { user, loading } = useAuth()
+export default function AdminRoute({ children }: Props) {
+  const { user, isAdmin, loading } = useAuth()
 
   if (loading) {
     return (
@@ -19,6 +19,10 @@ export default function PrivateRoute({ children }: Props) {
 
   if (!user) {
     return <Navigate to="/" replace />
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/teams" replace />
   }
 
   return <>{children}</>

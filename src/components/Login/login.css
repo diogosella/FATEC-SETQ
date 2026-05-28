@@ -1,32 +1,21 @@
-
-
 .loginInputContainer {
     background-color: white;
     padding: 28px;
     border-radius: 15px;
     width: 100%;
-    box-shadow: 0 15px 20px black;
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.6);
     box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .loginInputContainer {
-        padding: 22px;
+        padding: 20px;
     }
-}
-
-.inputContainer form {
-    display: flex;
-    flex-direction: column;
-}
-
-.inputContainer p {
-    margin: 0;
 }
 
 .formLabel {
     font-size: 14px;
-    padding: 16px 0 14px 0;
+    padding: 16px 0 10px 0;
     margin: 0;
 }
 
@@ -39,32 +28,34 @@
 }
 
 .inputArea {
-    width: 95%;
-    display: flex;
-    margin: 0 auto;
-    padding: 10px 8px;
+    width: 100%;
+    display: block;
+    margin: 0 auto 8px auto;
+    padding: 10px 10px;
     border-radius: 10px;
-    margin-bottom: 8px;
-    border: solid rgba(128, 128, 128, 0.185) 1px
+    border: 1px solid rgba(128, 128, 128, 0.185);
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
 .inputArea:focus {
     outline: none;
+    border-color: var(--main-orange);
 }
 
 .mainButton {
     text-align: center;
-    margin: 12px auto;
+    margin: 14px auto 8px auto;
     width: 100%;
     border-radius: 8px;
     padding: 10px 0;
     border: none;
     color: white;
     background-color: var(--main-orange);
+    cursor: pointer;
 }
 
 .mainButton:hover {
-    cursor: pointer;
     background-color: rgb(209, 137, 4);
     transition: all ease 0.2s;
 }
@@ -77,6 +68,7 @@
     border: none;
     background-color: transparent;
     color: var(--main-orange);
+    margin-top: 8px;
 }
 
 .secondaryButton:hover {
@@ -90,27 +82,30 @@
 
 .passwordButton {
     display: flex;
-    justify-content: left;
+    justify-content: flex-start;
     font-size: 14px;
     text-decoration: none;
     border: none;
     background-color: transparent;
     color: var(--main-orange);
-    margin: 18px 0 8px 4px;
+    margin: 14px 0 4px 4px;
 }
 
 .passwordButton:hover {
     cursor: pointer;
-    color:rgb(209, 137, 4);
+    color: rgb(209, 137, 4);
     transition: all ease 0.2s;
 }
 
 .errorMsgLogin {
-    width: 280px;
-    margin: 4px auto 18px auto;
-    padding: 2px;
+    width: 100%;
+    max-width: 320px;
+    margin: 6px auto 12px auto;
+    padding: 4px;
     text-align: center;
     color: white;
-    background-color:red;
+    background-color: red;
     border-radius: 100px;
+    font-size: 13px;
+    box-sizing: border-box;
 }

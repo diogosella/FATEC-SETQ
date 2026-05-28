@@ -9,12 +9,15 @@
     }
 }
 
-.loadingFull {
-    width: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20% auto;
+@keyframes queueSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .currentMatch {
@@ -23,51 +26,122 @@
 
 .matchupTitle {
     font-family: gotham-bold;
-    font-size: 42px;
-    margin: 10% 0 6% 28px;
+    font-size: clamp(28px, 6vw, 42px);
+    margin: 8% 0 5% 18px;
     color: var(--main-orange);
 }
 
 .matchup {
-    width: 80%;
+    width: 90%;
+    max-width: 100%;
     display: flex;
     position: relative;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: 0 auto 8px auto;
-    height: 140px;
+    min-height: 140px;
     border-radius: 25px;
-    gap: 18px;
+    gap: 12px;
     background-color: var(--main-orange);
-    padding: 48px;
+    padding: 32px 18px;
     color: white;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .TeamA, .TeamB {
-    width: 120px;
+    flex: 1;
+    min-width: 0;
     text-align: center;
-    font-size: 16px;
+    font-size: clamp(13px, 3vw, 16px);
     font-family: gotham-bold;
-    padding: 2px 20px;
+    padding: 2px 8px;
     text-shadow: 0 2px 22px black;
-    position: relative; 
+    position: relative;
+    word-break: break-word;
 }
 
 .faA, .faB {
     position: absolute;
-    font-size: 112px;
+    font-size: clamp(72px, 18vw, 112px);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: rgba(255, 255, 255, 0.267);
     filter: blur(2.5px);
+    pointer-events: none;
+}
+
+.vs {
+    font-family: gotham-bold;
+    font-size: clamp(20px, 4vw, 28px);
+    color: white;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+}
+
+.matchupTransferBadge {
+    position: absolute;
+    top: 10px;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--main-orange);
+    background-color: white;
+    border-radius: 50%;
+    text-shadow: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    z-index: 2;
+}
+
+.waitingForTeam {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.9;
+}
+
+.waitingIcon {
+    font-size: 22px;
+    color: rgba(255, 255, 255, 0.85);
+    animation: waitingPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes waitingPulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+
+.matchupTransferBadgeLeft {
+    left: 12px;
+}
+
+.matchupTransferBadgeRight {
+    right: 12px;
 }
 
 .teamsList {
     width: 90%;
     display: flex;
     flex-direction: column;
-    margin: 64px auto 40px auto;
+    margin: 48px auto 32px auto;
+}
+
+.resultsList {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin: 24px auto 40px auto;
 }
 
 .queueHeader {
@@ -80,11 +154,12 @@
 .teamsListTitle {
     font-family: gotham-bold;
     color: var(--main-orange);
-    font-size: 26px;
+    font-size: clamp(20px, 4.5vw, 26px);
     margin: 0 0 4px 0;
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .queueHeaderIcon {
@@ -151,21 +226,33 @@
 }
 
 .queueItem {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: 12px;
+    padding: 12px 14px 12px 22px;
     background-color: white;
     border: 1px solid rgba(128, 128, 128, 0.18);
-    border-left: 4px solid var(--faded-gray);
     border-radius: 12px;
     font-family: gotham;
-    font-size: 16px;
+    font-size: 14px;
     color: #2e2e2e;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
     animation: queueSlideIn 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
     opacity: 0;
+    flex-wrap: wrap;
+}
+
+.queueItem::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background-color: var(--faded-gray);
+    border-radius: 3px;
 }
 
 .queueItem:hover {
@@ -174,12 +261,29 @@
 }
 
 .queueItemNext {
-    border-left: 4px solid var(--main-orange);
     background-color: rgba(245, 134, 52, 0.06);
 }
 
-.queueItemNext:hover {
-    border-color: var(--main-orange);
+.queueItemNext::before {
+    background-color: var(--main-orange);
+}
+
+.queueItemTransferred {
+    background-color: rgba(177, 92, 26, 0.06);
+}
+
+.queueItemTransferred::before {
+    background-color: #b15c1a;
+}
+
+.queueItemTransferred .queuePosition {
+    background-color: #b15c1a;
+    color: white;
+    box-shadow: 0 2px 8px rgba(177, 92, 26, 0.4);
+}
+
+.queueItemTransferred .queueTeamName {
+    color: #b15c1a;
 }
 
 .queuePosition {
@@ -204,8 +308,9 @@
 
 .queueTeamName {
     flex: 1;
+    min-width: 0;
     font-family: gotham-bold;
-    font-size: 15px;
+    font-size: 14px;
     color: #2e2e2e;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -221,34 +326,29 @@
     font-size: 10px;
     letter-spacing: 0.8px;
     color: white;
-    background-color: var(--main-orange);
     padding: 4px 10px;
     border-radius: 999px;
     flex-shrink: 0;
+    background-color: var(--main-orange);
 }
 
-@keyframes queueSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.vs {
-    font-family: gotham-bold;
-    font-size: 28px;
+.queueTransferBadge {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
     color: white;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    background-color: #b15c1a;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .adminControls {
-    width: 80%;
-    margin: 36px auto 0 auto;
-    padding: 24px 24px;
+    width: 90%;
+    margin: 32px auto 0 auto;
+    padding: 22px 18px;
     background-color: rgba(245, 134, 52, 0.08);
     border: 1px dashed var(--main-orange);
     border-radius: 18px;
@@ -256,21 +356,23 @@
     flex-direction: column;
     align-items: center;
     animation: slideUp 0.4s ease forwards;
+    box-sizing: border-box;
 }
 
 .adminControlsTitle {
     font-family: gotham-bold;
     color: var(--main-orange);
-    font-size: 20px;
+    font-size: clamp(16px, 3.5vw, 20px);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
     gap: 10px;
+    text-align: center;
 }
 
 .adminButtons {
     display: flex;
-    gap: 18px;
+    gap: 12px;
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
@@ -278,18 +380,19 @@
 }
 
 .winnerButton {
-    flex: 1;
-    min-width: 180px;
-    max-width: 280px;
-    padding: 14px 18px;
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 14px 12px;
     font-family: gotham-bold;
-    font-size: 16px;
+    font-size: clamp(13px, 3vw, 16px);
     color: white;
     background-color: var(--main-orange);
     border: none;
     border-radius: 14px;
     cursor: pointer;
     transition: transform 0.15s ease, filter 0.15s ease, background-color 0.15s ease;
+    word-break: break-word;
 }
 
 .winnerButton:hover:not(:disabled) {
@@ -302,143 +405,8 @@
     cursor: not-allowed;
 }
 
-.winnerA,
-.winnerB {
+.winnerA, .winnerB {
     background-color: var(--main-orange);
-}
-
-@keyframes overlayFadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-@keyframes modalAppear {
-    from {
-        opacity: 0;
-        transform: translate(-50%, calc(-50% + 30px));
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
-}
-
-.confirmOverlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.45);
-    z-index: 200;
-    animation: overlayFadeIn 0.2s ease forwards;
-}
-
-.confirmModal {
-    position: fixed;
-    z-index: 201;
-    top: 50%;
-    left: 50%;
-    width: 85%;
-    max-width: 420px;
-    background-color: white;
-    border-radius: 18px;
-    padding: 24px 28px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-    transform: translate(-50%, -50%);
-    animation: modalAppear 0.25s ease forwards;
-}
-
-.confirmHeadline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-
-.confirmTitle {
-    font-family: gotham-bold;
-    color: var(--main-orange);
-    font-size: 22px;
-    margin: 0;
-}
-
-.confirmCloseButton {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--faded-gray);
-    font-size: 22px;
-    padding: 4px;
-}
-
-.confirmCloseButton:hover:not(:disabled) {
-    color: var(--main-orange);
-}
-
-.confirmText {
-    font-family: gotham;
-    font-size: 16px;
-    color: #333;
-    margin: 8px 0 24px 0;
-    line-height: 1.4;
-}
-
-.confirmText strong {
-    font-family: gotham-bold;
-    color: var(--main-orange);
-}
-
-.confirmActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-}
-
-.confirmCancelButton,
-.confirmOkButton {
-    padding: 10px 22px;
-    font-family: gotham-bold;
-    font-size: 14px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: filter 0.15s ease, transform 0.15s ease;
-}
-
-.confirmCancelButton {
-    background-color: transparent;
-    color: var(--faded-gray);
-    border: 1px solid var(--faded-gray);
-}
-
-.confirmCancelButton:hover:not(:disabled) {
-    color: var(--main-orange);
-    border-color: var(--main-orange);
-}
-
-.confirmOkButton {
-    background-color: var(--main-orange);
-    color: white;
-    min-width: 110px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.confirmOkButton:hover:not(:disabled) {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-}
-
-.confirmCancelButton:disabled,
-.confirmOkButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.resultsList {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    margin: 24px auto 40px auto;
 }
 
 .resultsItems {
@@ -451,18 +419,29 @@
 }
 
 .resultItem {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: 12px;
+    padding: 12px 14px 12px 22px;
     background-color: white;
     border: 1px solid rgba(128, 128, 128, 0.18);
-    border-left: 4px solid #f0c75e;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     animation: queueSlideIn 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
     opacity: 0;
+}
+
+.resultItem::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background-color: #f0c75e;
+    border-radius: 3px;
 }
 
 .resultItem:hover {
@@ -517,44 +496,11 @@
     white-space: nowrap;
 }
 
-.queueItemTransferred {
-    border-left: 4px solid #b15c1a;
-    background-color: rgba(177, 92, 26, 0.06);
+@media (max-width: 400px) {
+    .matchup {
+        padding: 24px 12px;
+    }
+    .queueItem, .resultItem {
+        padding: 10px 12px;
+    }
 }
-
-.queueItemTransferred .queuePosition {
-    background-color: #b15c1a;
-    color: white;
-    box-shadow: 0 2px 8px rgba(177, 92, 26, 0.4);
-}
-
-.queueItemTransferred .queueTeamName {
-    color: #b15c1a;
-}
-
-.queueTransferBadge {
-    font-family: gotham-bold;
-    font-size: 10px;
-    letter-spacing: 0.8px;
-    color: white;
-    background-color: #b15c1a;
-    padding: 4px 10px;
-    border-radius: 999px;
-    flex-shrink: 0;
-}
-
-.matchupTransferBadge {
-    display: inline-block;
-    margin-top: 8px;
-    font-family: gotham-bold;
-    font-size: 9px;
-    letter-spacing: 0.8px;
-    color: var(--main-orange);
-    background-color: white;
-    padding: 3px 8px;
-    border-radius: 999px;
-    text-shadow: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-    white-space: nowrap;
-}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

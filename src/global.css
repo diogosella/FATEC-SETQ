@@ -14,12 +14,253 @@
   font-family: 'gotham';
 }
 
-body {
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-html {
+html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-y: auto;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button {
+    font-family: inherit;
+}
+
+.contentContainer,
+.pageContainer {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.contentContainer::-webkit-scrollbar,
+.pageContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.contentContainer::-webkit-scrollbar-track,
+.pageContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contentContainer::-webkit-scrollbar-thumb,
+.pageContainer::-webkit-scrollbar-thumb {
+    background-color: var(--main-orange);
+    border-radius: 10px;
+}
+
+@media (min-width: 1025px) {
+    .contentContainer,
+    .pageContainer {
+        max-width: 520px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .contentContainer,
+    .pageContainer {
+        max-width: 600px;
+    }
+}
+
+.loadingFull {
+    width: 80px;
+    max-width: 25%;
+    display: block;
+    margin: 20% auto;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 30px));
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.confirmOverlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 200;
+    animation: overlayFadeIn 0.2s ease forwards;
+}
+
+.confirmModal {
+    position: fixed;
+    z-index: 201;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 32px);
+    max-width: 420px;
+    background-color: white;
+    border-radius: 18px;
+    padding: 24px 28px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%);
+    animation: modalAppear 0.25s ease forwards;
+    box-sizing: border-box;
+}
+
+.confirmHeadline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+.confirmTitle {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+    font-size: 22px;
+    margin: 0;
+}
+
+.confirmCloseButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--faded-gray);
+    font-size: 22px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.confirmCloseButton:hover:not(:disabled) {
+    color: var(--main-orange);
+}
+
+.confirmText {
+    font-family: 'gotham';
+    font-size: 16px;
+    color: #333;
+    margin: 8px 0 24px 0;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.confirmText strong {
+    font-family: 'gotham-bold';
+    color: var(--main-orange);
+}
+
+.confirmActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.confirmCancelButton,
+.confirmOkButton {
+    padding: 10px 22px;
+    font-family: 'gotham-bold';
+    font-size: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.confirmCancelButton {
+    background-color: transparent;
+    color: var(--faded-gray);
+    border: 1px solid var(--faded-gray);
+}
+
+.confirmCancelButton:hover:not(:disabled) {
+    color: var(--main-orange);
+    border-color: var(--main-orange);
+}
+
+.confirmOkButton {
+    background-color: var(--main-orange);
+    color: white;
+    min-width: 110px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirmOkButton:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.confirmCancelButton:disabled,
+.confirmOkButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.confirmSuccess {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8px 0 4px 0;
+    animation: overlayFadeIn 0.25s ease forwards;
+}
+
+.confirmSuccessIcon {
+    font-size: 56px;
+    color: var(--main-orange);
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 12px rgba(245, 134, 52, 0.35));
+}
+
+.confirmActionsCentered {
+    justify-content: center;
+}
+
+.confirmWarning {
+    position: relative;
+    color: #b15c1a;
+    font-size: 13px;
+    background-color: rgba(245, 134, 52, 0.08);
+    padding: 8px 12px 8px 18px;
+    border-radius: 6px;
+    margin: 4px 0 16px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.confirmWarning::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background-color: var(--main-orange);
+    border-radius: 2px;
 }

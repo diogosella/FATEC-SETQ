@@ -12,6 +12,7 @@ import SignUp from './pages/signupPage'
 import Disabled from './pages/disabledPage'
 import Teams from './pages/teamsPage'
 import PrivateRoute from './PrivateRoute'
+import AdminRoute from './AdminRoute'
 import MatchesPage from './pages/matchesPage'
 import ForgotPassword from './pages/forgotPage'
 import ConfigUser from './pages/configPage'
@@ -24,53 +25,46 @@ function App() {
   const location = useLocation()
 
   const freePages = [
-  '/',
-  '/controller',
-  '/myMatches',
-  '/configUser',
-  '/forgotPassword',
-  '/matches'
-]
+    '/',
+    '/controller',
+    '/myMatches',
+    '/configUser',
+    '/forgotPassword',
+    '/matches'
+  ]
 
-const isFreePage = freePages.includes(location.pathname)
+  const isFreePage = freePages.includes(location.pathname)
 
- if (!isFreePage)  {
-
+  if (!isFreePage) {
     if (systemMode === 'offline') {
       return <UnavailablePage />
     }
-
     if (systemMode === 'waiting') {
       return <Disabled />
     }
-
     if (systemMode === 'open') {
       return <Teams />
     }
-
   }
-
-  
 
   return (
     <Routes>
-
       <Route path="/offline" element={<UnavailablePage />} />
-
       <Route path='/' element={<LoginPage />} />
-
       <Route path='/signup' element={<SignUp />} />
-
       <Route path='/disabled' element={<Disabled />} />
-
       <Route path='/matches' element={<MatchesPage />} />
-
       <Route path='/forgotPassword' element={<ForgotPassword />} />
-
       <Route path='/configUser' element={<ConfigUser />} />
 
-    
-      <Route path='/controller' element={<ControllerPage />} />
+      <Route
+        path='/controller'
+        element={
+          <AdminRoute>
+            <ControllerPage />
+          </AdminRoute>
+        }
+      />
 
       <Route
         path='/teams'
@@ -89,7 +83,6 @@ const isFreePage = freePages.includes(location.pathname)
           </PrivateRoute>
         }
       />
-
     </Routes>
   );
 }

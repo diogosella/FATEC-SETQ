@@ -71,22 +71,54 @@ export const joinTeam = async (team_id: number): Promise<void> => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Usuário não autenticado');
 
+  const rpcAttempt = await supabase.rpc('join_team_atomic', { p_team_id: team_id });
+  if (!rpcAttempt.error) return;
+
+  const isMissingRpc =
+    rpcAttempt.error.code === 'PGRST202' ||
+    /function .*join_team_atomic.* does not exist/i.test(rpcAttempt.error.message ?? '');
+  if (!isMissingRpc) throw rpcAttempt.error;
+
   const { data: existing } = await supabase
     .from('user_team')
     .select('team_id')
     .eq('user_id', user.id)
     .maybeSingle();
-
   if (existing) throw new Error('Você já está em um time');
 
-  const { error } = await supabase
-    .from('user_team')
-    .insert([{
-      user_id: user.id,
-      team_id: team_id
-    }]);
+  const { data: team, error: teamErr } = await supabase
+    .from('teams')
+    .select('id, team_name, is_full')
+    .eq('id', team_id)
+    .maybeSingle();
+  if (teamErr) throw teamErr;
+  if (!team) throw new Error('Time não encontrado');
+  if (team.is_full) throw new Error('Time já está cheio');
 
-  if (error) throw error;
+  const { count: membersCount, error: countErr } = await supabase
+    .from('user_team')
+    .select('*', { count: 'exact', head: true })
+    .eq('team_id', team_id);
+  if (countErr) throw countErr;
+  if (membersCount !== null && membersCount >= 6) {
+    throw new Error('Time já tem 6 jogadores');
+  }
+
+  const { error: insertErr } = await supabase
+    .from('user_team')
+    .insert([{ user_id: user.id, team_id }]);
+  if (insertErr) throw insertErr;
+
+  const newCount = (membersCount ?? 0) + 1;
+  if (newCount >= 6) {
+    await markTeamAsFull(team_id);
+    try {
+      await registerFullTeam(team_id, team.team_name);
+    } catch (err) {
+      const supaErr = err as { code?: string };
+      if (supaErr?.code !== '23505') throw err;
+    }
+  }
 };
 
 export const getUserTeam = async (): Promise<number | null> => {
@@ -283,25 +315,42 @@ const getCycleToClean = (): { id: string; period: CyclePeriod; date: string } | 
 const closeOldCycle = async (period: CyclePeriod, date: string): Promise<void> => {
   const { data: ciclo, error: ciclErr } = await supabase
     .from('fullteams')
-    .select('team_id')
+    .select('team_id, team_name')
     .eq('cycle_period', period)
     .eq('cycle_date', date);
   if (ciclErr) throw ciclErr;
 
-  const teamIdsDoCiclo: number[] = (ciclo ?? []).map((r: { team_id: number }) => r.team_id);
+  const ciclosNoFullteams = (ciclo ?? []) as { team_id: number; team_name: string }[];
+  const teamIdsDoCiclo: number[] = ciclosNoFullteams.map((r) => r.team_id);
   if (teamIdsDoCiclo.length === 0) return;
+
+  const nameToId = new Map<string, number>();
+  ciclosNoFullteams.forEach((r) => nameToId.set(r.team_name, r.team_id));
 
   const cycleIdMatches = `${date}_${period}`;
   const { data: matches, error: matchesErr } = await supabase
     .from('matches')
-    .select('winner_team_id, loser_team_id')
+    .select('winner_team_id, loser_team_id, winner_team_name, loser_team_name')
     .eq('cycle_id', cycleIdMatches);
   if (matchesErr) throw matchesErr;
 
   const teamsQueJogaram = new Set<number>();
-  (matches ?? []).forEach((m: { winner_team_id: number | null; loser_team_id: number | null }) => {
-    if (m.winner_team_id != null) teamsQueJogaram.add(m.winner_team_id);
-    if (m.loser_team_id != null) teamsQueJogaram.add(m.loser_team_id);
+  (matches ?? []).forEach((m: {
+    winner_team_id: number | null;
+    loser_team_id: number | null;
+    winner_team_name: string | null;
+    loser_team_name: string | null;
+  }) => {
+    if (m.winner_team_id != null) {
+      teamsQueJogaram.add(m.winner_team_id);
+    } else if (m.winner_team_name && nameToId.has(m.winner_team_name)) {
+      teamsQueJogaram.add(nameToId.get(m.winner_team_name)!);
+    }
+    if (m.loser_team_id != null) {
+      teamsQueJogaram.add(m.loser_team_id);
+    } else if (m.loser_team_name && nameToId.has(m.loser_team_name)) {
+      teamsQueJogaram.add(nameToId.get(m.loser_team_name)!);
+    }
   });
 
   const sobreviventes = teamIdsDoCiclo.filter((id) => !teamsQueJogaram.has(id));
@@ -363,4 +412,13 @@ export const transferUnplayedTeamsIfCycleEnded = async (): Promise<boolean> => {
     }
     throw err;
   }
+};
+
+export const forceCloseCurrentCycle = async (): Promise<{ period: CyclePeriod; date: string }> => {
+  const { period, date } = getCurrentCycleInfo();
+  await closeOldCycle(period, date);
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(CLEANUP_STORAGE_KEY, `${date}_${period}`);
+  }
+  return { period, date };
 };

@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import { useMatches } from '../../hooks/useMatches';
 import { useAuth } from '../../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
+import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers, faClockRotateLeft, faRotateRight, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
 import './matchesPage.css';
 
 const formatTime = (iso: string) => {
@@ -44,19 +44,33 @@ export default function MatchesPage() {
                     <div className="currentMatch">
                         <h1 className='matchupTitle'>Jogando agora</h1>
                         <div className="matchup">
+                            {teamA?.transferred && (
+                                <span className='matchupTransferBadge matchupTransferBadgeLeft' title='Time A transferido do ciclo anterior'>
+                                    <FontAwesomeIcon icon={faRotateRight} />
+                                </span>
+                            )}
+                            {teamB?.transferred && (
+                                <span className='matchupTransferBadge matchupTransferBadgeRight' title='Time B transferido do ciclo anterior'>
+                                    <FontAwesomeIcon icon={faRotateRight} />
+                                </span>
+                            )}
                             <div className='TeamA'>
                                 <FontAwesomeIcon icon={faA} className='faA' />
-                                {teamA ? teamA.team_name : 'Aguardando time...'}
-                                {teamA?.transferred && (
-                                    <span className='matchupTransferBadge' title='Time transferido do ciclo anterior'>TRANSFERIDO</span>
+                                {teamA ? teamA.team_name : (
+                                    <span className="waitingForTeam">
+                                        <FontAwesomeIcon icon={faHourglassHalf} className='waitingIcon' />
+                                        <span>Aguardando time...</span>
+                                    </span>
                                 )}
                             </div>
                             <span className="vs">VS</span>
                             <div className='TeamB'>
                                 <FontAwesomeIcon icon={faB} className='faB' />
-                                {teamB ? teamB.team_name : 'Aguardando time...'}
-                                {teamB?.transferred && (
-                                    <span className='matchupTransferBadge' title='Time transferido do ciclo anterior'>TRANSFERIDO</span>
+                                {teamB ? teamB.team_name : (
+                                    <span className="waitingForTeam">
+                                        <FontAwesomeIcon icon={faHourglassHalf} className='waitingIcon' />
+                                        <span>Aguardando time...</span>
+                                    </span>
                                 )}
                             </div>
                         </div>
@@ -118,7 +132,9 @@ export default function MatchesPage() {
                                         <span className="queuePosition">{index + 1}</span>
                                         <span className="queueTeamName">{team.team_name}</span>
                                         {team.transferred && (
-                                            <span className="queueTransferBadge" title="Time transferido do ciclo anterior">TRANSFERIDO</span>
+                                            <span className="queueTransferBadge" title="Time transferido do ciclo anterior">
+                                                <FontAwesomeIcon icon={faRotateRight} />
+                                            </span>
                                         )}
                                         {index === 0 && !team.transferred && (
                                             <span className="queueNextBadge">PRÓXIMO</span>
