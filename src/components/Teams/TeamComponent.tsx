@@ -45,7 +45,7 @@ export default function TeamComponent({ teams, loading, error, userTeamId, joini
                                         : 'Vaga aberta';
                                 return (
                                     <li key={index} className={member ? "filledSpot" : "freeSpot"}>
-                                        {displayName}
+                                        <span className="memberName">{displayName}</span>
                                     </li>
                                 );
                             })}
