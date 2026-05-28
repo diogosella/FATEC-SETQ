@@ -35,6 +35,12 @@ img {
     display: block;
 }
 
+img.loading {
+    display: inline-block;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
 button {
     font-family: inherit;
 }

@@ -5,6 +5,7 @@ import LoginPage from './pages/loginPage'
 import {
   Routes,
   Route,
+  Navigate,
   useLocation,
   useNavigate
 } from 'react-router-dom'
@@ -31,6 +32,8 @@ const FREE_PAGES = [
   '/controller',
   '/myMatches',
 ]
+
+const CYCLE_PAGES = ['/teams', '/matches', '/disabled', '/offline']
 
 const AUTO_REDIRECT_INTERVAL_MS = 5000
 
@@ -61,8 +64,9 @@ function App() {
   }, [location.pathname, navigate, isAdmin, authLoading])
 
   const isFreePage = FREE_PAGES.includes(location.pathname)
+  const isCyclePage = CYCLE_PAGES.includes(location.pathname)
 
-  if (!isFreePage && !isAdmin) {
+  if (!authLoading && !isAdmin && !isFreePage) {
     if (systemMode === 'offline') {
       return <UnavailablePage />
     }
@@ -71,6 +75,16 @@ function App() {
     }
     if (systemMode === 'open') {
       return <Teams />
+    }
+
+    if (isCyclePage) {
+      const expected = getMainCyclePagePath()
+      if (expected !== location.pathname) {
+        return <Navigate to={expected} replace />
+      }
+    } else {
+      const expected = getMainCyclePagePath()
+      return <Navigate to={expected} replace />
     }
   }
 
