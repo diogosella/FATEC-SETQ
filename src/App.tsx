@@ -5,8 +5,11 @@ import LoginPage from './pages/loginPage'
 import {
   Routes,
   Route,
-  useLocation
+  useLocation,
+  useNavigate
 } from 'react-router-dom'
+
+import { useEffect } from 'react'
 
 import SignUp from './pages/signupPage'
 import Disabled from './pages/disabledPage'
@@ -17,25 +20,49 @@ import MatchesPage from './pages/matchesPage'
 import ForgotPassword from './pages/forgotPage'
 import ConfigUser from './pages/configPage'
 import MyMatchesPage from './pages/myMatchesPage'
+import { getMainCyclePagePath } from './utils/cyclePath'
+import { useAuth } from './hooks/useAuth'
+
+const FREE_PAGES = [
+  '/',
+  '/signup',
+  '/forgotPassword',
+  '/configUser',
+  '/controller',
+  '/myMatches',
+]
+
+const AUTO_REDIRECT_INTERVAL_MS = 5000
 
 function App() {
 
   const systemMode = localStorage.getItem('systemMode')
-
   const location = useLocation()
+  const navigate = useNavigate()
+  const { isAdmin, loading: authLoading } = useAuth()
 
-  const freePages = [
-    '/',
-    '/controller',
-    '/myMatches',
-    '/configUser',
-    '/forgotPassword',
-    '/matches'
-  ]
+  useEffect(() => {
+    const shouldSkip = () =>
+      authLoading ||
+      isAdmin ||
+      FREE_PAGES.includes(location.pathname)
 
-  const isFreePage = freePages.includes(location.pathname)
+    const checkCycle = () => {
+      if (shouldSkip()) return
+      const expected = getMainCyclePagePath()
+      if (expected !== location.pathname) {
+        navigate(expected, { replace: true })
+      }
+    }
 
-  if (!isFreePage) {
+    checkCycle()
+    const interval = setInterval(checkCycle, AUTO_REDIRECT_INTERVAL_MS)
+    return () => clearInterval(interval)
+  }, [location.pathname, navigate, isAdmin, authLoading])
+
+  const isFreePage = FREE_PAGES.includes(location.pathname)
+
+  if (!isFreePage && !isAdmin) {
     if (systemMode === 'offline') {
       return <UnavailablePage />
     }
