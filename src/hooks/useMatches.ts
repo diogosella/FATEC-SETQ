@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getFullTeams, declareWinner } from '../services/teams';
+import { getFullTeams, declareWinner, addAdminTeamToQueue } from '../services/teams';
 import { registerMatchResult, getRecentResults } from '../services/matches';
 import type { FullTeam } from '../../backend/src/types/team';
 import type { MatchResult } from '../../backend/src/types/match';
@@ -11,6 +11,7 @@ export const useMatches = () => {
   const [recentResults, setRecentResults] = useState<MatchResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [declaring, setDeclaring] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchAll = useCallback(async () => {
@@ -72,6 +73,19 @@ export const useMatches = () => {
     }
   };
 
+  const handleAddTeamToQueue = async (team_name: string) => {
+    setAdding(true);
+    try {
+      await addAdminTeamToQueue(team_name);
+      await fetchAll();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao adicionar time');
+      throw err;
+    } finally {
+      setAdding(false);
+    }
+  };
+
   return {
     teamA,
     teamB,
@@ -79,7 +93,9 @@ export const useMatches = () => {
     recentResults,
     loading,
     declaring,
+    adding,
     error,
     handleDeclareWinner,
+    handleAddTeamToQueue,
   };
 };

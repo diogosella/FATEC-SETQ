@@ -4,32 +4,9 @@ import { faRightFromBracket, faGear, faUserShield, faClockRotateLeft } from '@fo
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../supabase'
 import { useAuth } from '../../hooks/useAuth'
+import { getMainCyclePagePath } from '../../utils/cyclePath'
 import logo from "../../assets/images/white-logo.png"
 import { useState } from 'react'
-
-function getMainCyclePagePath(): string {
-    const mode = localStorage.getItem('systemMode')
-
-    if (mode === 'offline') return '/offline'
-    if (mode === 'waiting') return '/disabled'
-    if (mode === 'open') return '/teams'
-
-    const now = new Date()
-    const dow = now.getDay()
-    if (dow === 0 || dow === 6) return '/offline'
-
-    const minutes = now.getHours() * 60 + now.getMinutes()
-    const h1430 = 14 * 60 + 30
-    const h1540 = 15 * 60 + 40
-    const h2030 = 20 * 60 + 30
-    const h2140 = 21 * 60 + 40
-
-    const dentroDoHorario =
-        (minutes >= h1430 && minutes < h1540) ||
-        (minutes >= h2030 && minutes < h2140)
-
-    return dentroDoHorario ? '/teams' : '/disabled'
-}
 
 export default function Header() {
     const [open, setOpen] = useState(false)
@@ -61,7 +38,7 @@ export default function Header() {
     return (
         <>
             <div className="headerContainer">
-                <Link to={getMainCyclePagePath()} className="logo">
+                <Link to={getMainCyclePagePath()} className="logo" title="Ir para a página principal do ciclo">
                     <img className='logoIcon' src={logo} />
                     <p className='logoText'>FATEC SetQ</p>
                     {isAdmin && <span className='adminBadge'>ADMIN</span>}

@@ -504,3 +504,53 @@
         padding: 10px 12px;
     }
 }
+
+.addTeamButton {
+    width: 100%;
+    margin: 0 0 16px 0;
+    padding: 10px 16px;
+    background-color: transparent;
+    color: var(--main-orange);
+    border: 1px dashed var(--main-orange);
+    border-radius: 12px;
+    font-family: gotham-bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.addTeamButton:hover:not(:disabled) {
+    background-color: var(--main-orange);
+    color: white;
+}
+
+.addTeamButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.addTeamInput {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+.addTeamInput:focus {
+    border-color: var(--main-orange);
+}
+
+.addTeamInput:disabled {
+    opacity: 0.6;
+    background-color: rgba(128, 128, 128, 0.05);
+}

@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import { useMatches } from '../../hooks/useMatches';
 import { useAuth } from '../../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers, faClockRotateLeft, faRotateRight, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
+import { faA, faB, faVolleyball, faTrophy, faXmark, faUsers, faClockRotateLeft, faRotateRight, faHourglassHalf, faPlus } from '@fortawesome/free-solid-svg-icons'
 import './matchesPage.css';
 
 const formatTime = (iso: string) => {
@@ -12,10 +12,13 @@ const formatTime = (iso: string) => {
 };
 
 export default function MatchesPage() {
-    const { teamA, teamB, queue, recentResults, loading, declaring, handleDeclareWinner } = useMatches();
+    const { teamA, teamB, queue, recentResults, loading, declaring, adding, handleDeclareWinner, handleAddTeamToQueue } = useMatches();
     const { isAdmin } = useAuth();
 
     const [pendingWinner, setPendingWinner] = useState<'A' | 'B' | null>(null);
+    const [addOpen, setAddOpen] = useState(false);
+    const [newTeamName, setNewTeamName] = useState('');
+    const [addError, setAddError] = useState<string | null>(null);
 
     const date = new Date();
 
@@ -26,6 +29,35 @@ export default function MatchesPage() {
         if (!pendingWinner) return;
         await handleDeclareWinner(pendingWinner);
         setPendingWinner(null);
+    };
+
+    const openAdd = () => {
+        setNewTeamName('');
+        setAddError(null);
+        setAddOpen(true);
+    };
+
+    const closeAdd = () => {
+        if (adding) return;
+        setAddOpen(false);
+        setNewTeamName('');
+        setAddError(null);
+    };
+
+    const confirmAdd = async () => {
+        const name = newTeamName.trim();
+        if (!name) {
+            setAddError('Informe o nome do time');
+            return;
+        }
+        try {
+            await handleAddTeamToQueue(name);
+            setAddOpen(false);
+            setNewTeamName('');
+            setAddError(null);
+        } catch (err: unknown) {
+            setAddError(err instanceof Error ? err.message : 'Erro ao adicionar time');
+        }
     };
 
     const pendingTeamName =
@@ -115,6 +147,17 @@ export default function MatchesPage() {
                                 <span className='queueCount'>{queue.length} {queue.length === 1 ? 'time' : 'times'}</span>
                             )}
                         </div>
+
+                        {isAdmin && (
+                            <button
+                                className="addTeamButton"
+                                onClick={openAdd}
+                                disabled={adding}
+                            >
+                                <FontAwesomeIcon icon={faPlus} /> Adicionar time à fila
+                            </button>
+                        )}
+
                         {queue.length === 0 ? (
                             <div className="noTeamsRegistered">
                                 <FontAwesomeIcon icon={faVolleyball} className='faVolleyball' />
@@ -216,6 +259,56 @@ export default function MatchesPage() {
                                 {declaring
                                     ? (<img src="src\assets\images\loading.gif" className="loading" />)
                                     : 'Confirmar'}
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {addOpen && (
+                <>
+                    <div className="confirmOverlay" onClick={closeAdd}></div>
+                    <div className="confirmModal">
+                        <div className="confirmHeadline">
+                            <h2 className="confirmTitle">Adicionar time à fila</h2>
+                            <button
+                                className="confirmCloseButton"
+                                onClick={closeAdd}
+                                disabled={adding}
+                            >
+                                <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                        </div>
+                        <p className="confirmText">
+                            O novo time será inserido <strong>no final da fila</strong> do ciclo atual.
+                        </p>
+                        <input
+                            type="text"
+                            className="addTeamInput"
+                            placeholder="Nome do time"
+                            value={newTeamName}
+                            onChange={(e) => setNewTeamName(e.target.value)}
+                            disabled={adding}
+                            autoFocus
+                            maxLength={60}
+                        />
+                        {addError && (
+                            <p className="confirmText confirmWarning">{addError}</p>
+                        )}
+                        <div className="confirmActions">
+                            <button
+                                className="confirmCancelButton"
+                                onClick={closeAdd}
+                                disabled={adding}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="confirmOkButton"
+                                onClick={confirmAdd}
+                                disabled={adding}
+                            >
+                                {adding ? 'Adicionando...' : 'Adicionar'}
                             </button>
                         </div>
                     </div>
