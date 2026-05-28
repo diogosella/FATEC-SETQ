@@ -1,8 +1,32 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './unavailablePage.css'
 import Header from '../../components/Header'
 import logo from '../../assets/images/logo-300.jpg'
 
 export default function UnavailablePage() {
+    const navigate = useNavigate()
+
+useEffect(() => {
+
+    const checkWeekend = () => {
+
+        const hoje = new Date().getDay()
+
+        // se NÃO for sábado nem domingo
+        if (hoje !== 0 && hoje !== 6) {
+            navigate('/disabled')
+        }
+
+    }
+
+    checkWeekend()
+
+    const interval = setInterval(checkWeekend, 60000)
+
+    return () => clearInterval(interval)
+
+}, [navigate])
     return (
         <div className="pageContainer unavailableBg">
             
