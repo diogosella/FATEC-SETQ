@@ -30,24 +30,46 @@
     padding-left: 22px;
     padding-right: 14px;
     margin: 0;
+    list-style: none;
 }
 
 .filledSpot, .freeSpot {
-    width: 45%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: calc(50% - 8px);
     min-width: 0;
     margin: 6px 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: clamp(12px, 2.6vw, 14px);
+    font-size: clamp(11px, 2.6vw, 14px);
+    box-sizing: border-box;
+}
+
+.filledSpot::before, .freeSpot::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.filledSpot::before {
+    background-color: var(--main-orange);
+}
+
+.freeSpot::before {
+    background-color: var(--faded-gray);
 }
 
 .freeSpot {
     color: var(--faded-gray);
 }
 
-.filledSpot::marker {
-    color: var(--main-orange);
+.memberName {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .displayAlreadyIn {
@@ -58,6 +80,7 @@
     display: flex;
     justify-content: center;
     padding: 0 12px;
+    margin-top: 18px;
 }
 
 .joinButton {
@@ -87,7 +110,7 @@
 .hrLine {
     border-top: 1px solid var(--main-orange);
     width: 95%;
-    margin: 0 auto 14px auto;
+    margin: 18px auto 14px auto;
 }
 
 .loadingTeams {
@@ -162,11 +185,15 @@
 }
 
 @media (max-width: 600px) {
-    .filledSpot, .freeSpot {
-        width: 100%;
-    }
     .displayMembers {
-        padding-left: 18px;
+        padding-left: 16px;
         padding-right: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .filledSpot, .freeSpot {
+        gap: 4px;
+        font-size: 10px;
     }
 }
